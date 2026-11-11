@@ -49,7 +49,26 @@ npm run fake-yoba -- --stop-after 20       # 20초 뒤 멈춤 → "확인 불가
 | `SMOOTHING_SECONDS` | `2` | 화면 숫자 스무딩 정도 |
 | `STREAM_MAX_CLIENTS` | `30` | 확대 화면(MJPEG) 동시 시청 상한. 넘으면 1초 스냅샷으로 자동 전환 |
 
-## 배포 (서버 1대)
+## 학교 서버 배포 (Docker)
+
+SSH로 접속되고 Docker가 있는 서버라면 웹과 Redis를 한 번에 띄웁니다.
+
+```bash
+git clone https://github.com/koreahghg/yoba-web.git && cd yoba-web
+cp .env.example .env        # ADMIN_PASSWORD, REDIS_PASSWORD 채우기
+docker compose up -d --build
+docker compose logs -f web  # "YOBA 웹 서버: http://localhost:8080" 이 보이면 성공
+```
+
+Redis는 서버 안에서만 열려 있으므로, YOBA 노트북은 **SSH 터널**로 붙습니다. 노트북에서:
+
+```bash
+ssh -N -L 6379:127.0.0.1:6379 사용자@학교서버주소
+```
+
+이 창을 켜 둔 채로 YOBA의 `configs/service.yaml`을 `redis.url: redis://:REDIS_PASSWORD@localhost:6379/0`으로 두고 `--live --publish`로 실행합니다. Redis 포트를 인터넷에 열지 않아도 되고, 전송도 SSH로 암호화됩니다. 터널이 끊기면 웹이 3초 안에 "확인 불가"로 바뀌므로, 행사 때는 `autossh` 등으로 자동 재연결하는 게 좋습니다.
+
+## 배포 (서버 1대, Docker 없이)
 
 Node 서버 + Redis + nginx(HTTPS)로 충분합니다. nginx에서는 WebSocket 업그레이드와 MJPEG 버퍼링 끄기가 필요합니다.
 
