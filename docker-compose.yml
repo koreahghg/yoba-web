@@ -22,7 +22,12 @@ services:
     ports:
       - "${WEB_PORT:-8080}:8080"
     volumes:
-      - ./data:/app/data
+      # 이름 있는 볼륨: 이미지의 /app/data 권한(node)을 그대로 이어받아 DB를 쓸 수 있다
+      # (./data 같은 폴더 연결은 root 소유로 만들어져 node가 쓰지 못함)
+      - yoba-data:/app/data
     depends_on:
       - redis
     restart: unless-stopped
+
+volumes:
+  yoba-data:
