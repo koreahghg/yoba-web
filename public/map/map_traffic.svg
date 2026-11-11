@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" width="1226" height="578" viewBox="0 35 613 289" version="1.1" id="svg1" sodipodi:docname="map_traffic_yongbong.svg" inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)">
+  <defs id="defs1">
+    <style id="style1">
+.parking-status{stroke-width:3;fill-opacity:0.28;}
+.status-free{fill:#35B86B;stroke:#35B86B;}
+.status-busy{fill:#F5A623;stroke:#F5A623;}
+.status-full{fill:#E54B4B;stroke:#E54B4B;fill-opacity:0.34;}
+.poi-dot{fill:#0a63b6;}
+.header-bar{fill:#045eac;}
+.map-frame{fill:#f8f8f8;stroke:#e5e5e5;stroke-width:1.2;}
+.header-title-main{font-family:'Pretendard','Noto Sans KR','Malgun Gothic',sans-serif;font-size:16px;font-weight:800;fill:#ffe43b;}
+.header-title-sub{font-family:'Pretendard','Noto Sans KR','Malgun Gothic',sans-serif;font-size:16px;font-weight:800;fill:#ffffff;}
+</style>
+    <style id="style2">text,tspan{font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;}</style>
+    <style id="traffic-status-style">
+.traffic-segment {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .94;
+}
+.traffic-free { stroke: #35B86B !important; }
+.traffic-slow { stroke: #F5A623 !important; }
+.traffic-jam { stroke: #E54B4B !important; }
+.traffic-unknown { stroke: #9AA4AE !important; }
+</style>
+  </defs>
+  <sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="1.1461023" inkscape:cx="461.12812" inkscape:cy="213.33174" inkscape:window-width="2560" inkscape:window-height="1369" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="traffic-status-layer"/>
+  <title id="title1">Editable road segments</title>
+  <desc id="desc1">Each road segment is a separate stroke object for easy editing in Inkscape.</desc>
+  <g inkscape:groupmode="layer" inkscape:label="배경" id="layer-bg" transform="translate(0,-0.84707069)">
+</g>
+  <g inkscape:groupmode="layer" inkscape:label="지도틀" id="layer-frame" transform="translate(0,-0.84707069)">
+    <rect id="map-frame" class="map-frame" x="4" y="37" width="605" height="287" rx="24" ry="24"/>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="회색 도로" id="layer-gray" transform="translate(0,-0.84707069)">
+    <path id="gray-road-01" inkscape:label="회색도로 01" d="m 12,183 149.9,3.1" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-02" inkscape:label="회색도로 02" d="M 317,154.8 V 107 l 5,-5 7,-2 V 54" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-03" inkscape:label="회색도로 03" d="m 178,45 -10.5,97.5" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-04" inkscape:label="회색도로 04" d="M 418.5,251.5 481.4,154" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-05" inkscape:label="회색도로 05" d="m 534,69 -52.6,85" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-06" inkscape:label="회색도로 06" d="M 154.5,247 73,242" fill="none" stroke="#c9c9ca" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-07" inkscape:label="회색도로 07" d="m 419.80152,252.80152 10.71582,5.66966 94.55132,59.46843" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-07a" inkscape:label="회색도로 07a (IC 연결직선로)" d="m 528.24764,316.73523 45.9957,-16.64974" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-08" inkscape:label="회색도로 08" d="m 235.54825,150.01897 5.36712,-63.24206 -4.96956,-6.69228 h -22.66118" fill="none" stroke="#c9c9ca" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-09" inkscape:label="회색도로 09" d="m 303,239.2 -2,25.8 -16,44" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-10" inkscape:label="회색도로 10" d="M 154.5,247 147,314" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-11" inkscape:label="회색도로 11" d="M 397.4,148.3 355.5,212" fill="none" stroke="#c9c9ca" stroke-width="5.7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-12" inkscape:label="회색도로 12" d="M 418.5,251.5 355.5,212" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-13" inkscape:label="회색도로 13" d="m 265,189 55,1 8.6,3.3" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-14" inkscape:label="회색도로 14" d="M 538,190 481.4,154" fill="none" stroke="#c9c9ca" stroke-width="7.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-15" inkscape:label="회색도로 15" d="M 344.6,232.7 405,271" fill="none" stroke="#c9c9ca" stroke-width="5.7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-16" inkscape:label="회색도로 16" d="M 420.3,117.3 481.4,154" fill="none" stroke="#c9c9ca" stroke-width="7.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-17" inkscape:label="회색도로 17" d="M 210,249.8 211,188" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-18" inkscape:label="회색도로 18" d="m 154.5,247 7.4,-60.9" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-19" inkscape:label="회색도로 19" d="M 420.3,117.3 453,67" fill="none" stroke="#c9c9ca" stroke-width="5.7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-20" inkscape:label="회색도로 20" d="m 213.10034,80.09966 -2.00068,60.59759" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-21" inkscape:label="회색도로 21" d="m 265,189 -0.6,53.7" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-22" inkscape:label="회색도로 22" d="M 264.4,242.7 210,249.8" fill="none" stroke="#c9c9ca" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-23" inkscape:label="회색도로 23" d="M 210,249.8 154.5,247" fill="none" stroke="#c9c9ca" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-24" inkscape:label="회색도로 24" d="m 211,188 54,1" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-25" inkscape:label="회색도로 25" d="m 213.2,153 -2.2,-11 -4,3 -39.5,-2.5" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-26" inkscape:label="회색도로 26" d="m 405,271 -28,46" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-27" inkscape:label="회색도로 27" d="m 265,152.2 52,2.6" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-28" inkscape:label="회색도로 28" d="M 161.9,186.1 211,188" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-29" inkscape:label="회색도로 29" d="m 369.2,131 -9.2,-8 v -3 l 19,-29" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-30" inkscape:label="회색도로 30" d="m 126,133 41.5,9.5" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-31" inkscape:label="회색도로 31" d="m 379,91 41.3,26.3" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-32" inkscape:label="회색도로 32" d="m 161.9,186.1 5.6,-43.6" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-33" inkscape:label="회색도로 33" d="m 303,239.2 41.6,-6.5" fill="none" stroke="#c9c9ca" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-34" inkscape:label="회색도로 34" d="m 303,239.2 -23,1.8 -6,2 -9.6,-0.3" fill="none" stroke="#c9c9ca" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-35" inkscape:label="회색도로 35" d="m 265,155.06861 v 34.14762" fill="none" stroke="#c9c9ca" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-36" inkscape:label="회색도로 36" d="m 395,62 v 2 l -16,27" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-37" inkscape:label="회색도로 37" d="m 213.2,153 -2.2,5 v 30" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-38" inkscape:label="회색도로 38" d="m 397.4,148.3 5.6,-7.3 6,-7 11.3,-16.7" fill="none" stroke="#c9c9ca" stroke-width="5.7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-39" inkscape:label="회색도로 39" d="M 347,163.2 369.2,131" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-40" inkscape:label="회색도로 40" d="M 328.6,193.3 338,179 347,163.2" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-41" inkscape:label="회색도로 41" d="m 369.2,131 28.2,17.3" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-42" inkscape:label="회색도로 42" d="m 347,163.2 -21,-7.2 -9,-1.2" fill="none" stroke="#c9c9ca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-43" inkscape:label="회색도로 43" d="M 355.5,212 328.6,193.3" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-44" inkscape:label="회색도로 44" d="m 263.91633,151.93948 -48.7139,-1.08254" fill="none" stroke="#c9c9ca" stroke-width="3.43453" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-45" inkscape:label="회색도로 45" d="m 405,271 13.5,-19.5" fill="none" stroke="#c9c9ca" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="gray-road-46" inkscape:label="회색도로 46" d="m 355.5,212 -10.9,20.7" fill="none" stroke="#c9c9ca" stroke-width="5.7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="주황색 고속도로" id="layer-orange" transform="translate(0,-0.84707069)">
+    <path id="orange-mainline" inkscape:label="고속도로 본선" d="m 580,59 c 1,7 -7,54 -13,91 -4,25 -8,51 -11,67 -3,15 -5,25 -7,31 -4,17 -11,32 -24,45 l -20,27" fill="none" stroke="#fdd35c" stroke-width="13.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="orange-ramp-01" inkscape:label="IC 램프 01" d="m 549,248 -9,-2 -6,2 c -7,4 -11,11 -14,22 -2,7 -4,16 5,23" fill="none" stroke="#fdd35c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="orange-ramp-02" inkscape:label="IC 램프 02" d="m 549,248 c 9,1 14,6 16,13 3,11 6,23 15,39" fill="none" stroke="#fdd35c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="orange-ramp-03" inkscape:label="IC 램프 03" d="m 525,293 c 8,3 13,5 18,2 9,-4 18,-3 37,5" fill="none" stroke="#fdd35c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <metadata id="metadata1">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:title>Editable road segments</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g inkscape:groupmode="layer" inkscape:label="파란 점" id="layer-dots" transform="translate(0,-0.84707069)">
+    <circle id="dot-gwangju-science-high" inkscape:label="광주자연과학고 점" cx="287" cy="54" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-training-center" inkscape:label="교육연수원 점" cx="361.52411" cy="69.121849" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-usan-middle" inkscape:label="우산중 점" cx="148.67867" cy="124.91516" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-safety-center" inkscape:label="빛고을국민안전체험관 점" cx="249.37276" cy="112.35219" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-munjeong-girls-high" inkscape:label="문정여고 점" cx="339" cy="114" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-munjeong-elementary" inkscape:label="문정초 점" cx="384" cy="110" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-munsan-middle" inkscape:label="문산중 점" cx="448" cy="104" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-ojeong-elementary" inkscape:label="오정초 점" cx="132" cy="219" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-yongbong-middle" inkscape:label="용봉중 점" cx="87.303154" cy="223.76486" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-munwoo-elementary" inkscape:label="문우초 점" cx="243" cy="207" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-munheung-middle" inkscape:label="문흥중 점" cx="298" cy="207" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-munheung-central-elementary" inkscape:label="문흥중앙초 점" cx="371" cy="267" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-munsan-elementary" inkscape:label="문산초 점" cx="488" cy="174" r="4" fill="#0a63b6" class="poi-dot"/>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="기관명" id="layer-labels" style="font-weight:700;font-family:'Noto Sans KR';fill:#3a3a3a" transform="translate(0,-0.84707069)">
+    <text id="label-ai-center" x="263.86118" y="96.712082" font-size="16" fill="#006fc0" style="fill:#006fc0;font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">AI교육원</text>
+    <text id="label-ai-center-8" x="527.41321" y="267.53064" font-size="16" fill="#006fc0" style="fill:#006fc0;font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">동광주IC</text>
+    <text id="label-gwangju-science-high" x="257" y="48" font-size="10px" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal"><tspan x="257" y="48" id="tspan3" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">광주자연과학고</tspan><tspan x="257" y="60" id="tspan4" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal"/></text>
+    <text id="label-training-center" x="341" y="53" font-size="12px" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal"><tspan x="341" y="53" id="tspan5" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">교육연수원</tspan><tspan x="341" y="65" id="tspan6" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal"/></text>
+    <text id="label-usan-middle" x="131.00771" y="108.83034" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">우산중</text>
+    <text id="label-safety-center" x="243.23518" y="101.90746" font-size="10px" style="text-align:center;text-anchor:middle;font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal"><tspan sodipodi:role="line" id="tspan12" x="225.37018" y="101.90746" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal"><tspan x="225.37018" y="101.90746" id="tspan7" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">빛고을</tspan></tspan><tspan sodipodi:role="line" id="tspan13" x="225.37018" y="115.33416" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">국민안전</tspan><tspan sodipodi:role="line" x="225.37018" y="128.76086" id="tspan14" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">체험관</tspan></text>
+    <text id="label-munjeong-girls-high" x="320.66324" y="136.79948" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal"><tspan x="320.66324" y="136.79948" id="tspan8" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">문정여고</tspan></text>
+    <text id="label-munjeong-elementary" x="373.76865" y="131.61954" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">문정초</text>
+    <text id="label-munsan-middle" x="462.18253" y="106.02313" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">문산중</text>
+    <text id="label-ojeong-elementary" x="117.02057" y="204" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">오정초</text>
+    <text id="label-yongbong-middle" x="43.382889" y="226.51337" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">용봉중</text>
+    <text id="label-munwoo-elementary" x="228.7018" y="229.85089" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">문우초</text>
+    <text id="label-munheung-middle" x="283.61697" y="229.61697" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">문흥중</text>
+    <text id="label-munheung-central-elementary" x="339.12854" y="280.86118" font-size="10px" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal"><tspan x="339.12854" y="280.86118" id="tspan9" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">문흥중앙초</tspan></text>
+    <text id="label-munsan-elementary" x="474" y="197" font-size="12" style="font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">문산초</text>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="AI교육원_공원_표시" id="layer-ai-park" transform="translate(0,-0.84707069)">
+    <g id="ai-center-display" transform="matrix(0.64580653,0,0,0.59853511,104.8926,33.774616)">
+      <circle id="ai-congestion-ring" cx="287" cy="149" r="33" fill="none" stroke="#5fbf8f" stroke-width="6" opacity="0.95"/>
+      <circle id="ai-congestion-ring-bg" cx="287" cy="149" r="26" fill="#eaf5ff" opacity="0.85"/>
+      <g id="ai-building-icon" transform="translate(287,149)">
+        <rect id="ai-building-body" x="-15" y="-20" width="30" height="42" rx="2" fill="#1d7fd1"/>
+        <rect x="-10.5" y="-13" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect1"/>
+        <rect x="-2.0999999" y="-13" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect2"/>
+        <rect x="6.3000002" y="-13" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect3"/>
+        <rect x="-10.5" y="-4.3000002" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect4"/>
+        <rect x="-2.0999999" y="-4.3000002" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect5"/>
+        <rect x="6.3000002" y="-4.3000002" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect6"/>
+        <rect x="-10.5" y="4.4000001" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect7"/>
+        <rect x="-2.0999999" y="4.4000001" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect8"/>
+        <rect x="6.3000002" y="4.4000001" width="4.1999998" height="4.1999998" fill="#ffffff" id="rect9"/>
+        <rect x="-3" y="12.8" width="6" height="9.1999998" fill="#ffffff" id="rect10"/>
+      </g>
+      <rect id="ai-congestion-badge" x="263" y="181" width="48" height="16" rx="8" fill="#5fbf8f"/>
+      <text id="ai-congestion-badge-text" x="287" y="192.5" text-anchor="middle" style="fill:#ffffff;font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">혼잡도</text>
+    </g>
+    <g id="munheung-neighborhood-park-display" transform="translate(0,-32)">
+      <path id="munheung-park-area" d="m 162,290 h 119 l -8,44 H 159 Z" fill="#dce9bf"/>
+      <g id="munheung-park-trees" transform="translate(184,307)">
+        <rect x="-4" y="8" width="5" height="10" rx="1" fill="#8a6b41" id="rect11"/>
+        <circle cx="-1" cy="2" r="9" fill="#71b258" id="circle11"/>
+        <circle cx="8" cy="3" r="7" fill="#5da449" id="circle12"/>
+        <rect x="6" y="10" width="4" height="8" rx="1" fill="#8a6b41" id="rect12"/>
+        <circle cx="10" cy="4" r="6" fill="#87c06b" id="circle13"/>
+      </g>
+      <text id="label-munheung-neighborhood-park" x="201" y="319" font-size="13.5px" style="fill:#5a7b2c;font-family:'Noto Sans KR',sans-serif;font-weight:800;font-style:normal;font-stretch:normal">문화근린공원</text>
+    </g>
+  </g>
+  <g id="traffic-status-layer" inkscape:groupmode="layer" inkscape:label="교통상태">
+    <g id="traffic-route-donggwangju" inkscape:label="동광주IC→AI교육원 (DG 01-06)" data-route="donggwangju-ai">
+      <g id="traffic-dg-segment-01" inkscape:label="DG-01 IC 연결 직선로" data-route="donggwangju-ai" data-seq="1" data-source-road="gray-road-07a">
+        <path id="traffic-dg-01" inkscape:label="DG-01 상태선 (직선)" d="m 526.7535,316.89625 52.47406,-19.07944" fill="none" stroke="#8e5cf6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="donggwangju-ai" data-seq="1" data-source-road="gray-road-07a" opacity="0.94"/>
+      </g>
+      <g id="traffic-dg-segment-02" inkscape:label="DG-02 IC→문흥중앙초 방향" data-route="donggwangju-ai" data-seq="2" data-source-road="gray-road-07">
+        <path id="traffic-dg-02" inkscape:label="DG-02 상태선" d="m 419.80152,252.80152 10.71582,5.66966 94.55132,59.46843" fill="none" stroke="#2D9CDB" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="donggwangju-ai" data-seq="2" data-source-road="gray-road-07" opacity="0.94"/>
+      </g>
+      <g id="traffic-dg-segment-03" inkscape:label="DG-03 문흥중앙초→중앙분기" data-route="donggwangju-ai" data-seq="3" data-source-road="gray-road-12">
+        <path id="traffic-dg-03" inkscape:label="DG-03 상태선" d="M 418.5,251.5 355.5,212" fill="none" stroke="#00B7C2" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="donggwangju-ai" data-seq="3" data-source-road="gray-road-12" opacity="0.94"/>
+      </g>
+      <g id="traffic-dg-segment-04" inkscape:label="DG-04 중앙분기 연결부" data-route="donggwangju-ai" data-seq="4" data-source-road="gray-road-43">
+        <path id="traffic-dg-04" inkscape:label="DG-04 상태선" d="M 355.5,212 328.6,193.3" fill="none" stroke="#00B894" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="donggwangju-ai" data-seq="4" data-source-road="gray-road-43" opacity="0.94"/>
+      </g>
+      <g id="traffic-dg-segment-05" inkscape:label="DG-05 AI교육원 남측 접근로" data-route="donggwangju-ai" data-seq="5" data-source-road="gray-road-13">
+        <path id="traffic-dg-05" inkscape:label="DG-05 상태선" d="m 265,189 55,1 8.6,3.3" fill="none" stroke="#F39C12" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="donggwangju-ai" data-seq="5" data-source-road="gray-road-13" opacity="0.94"/>
+      </g>
+      <g id="traffic-dg-segment-06" inkscape:label="DG-06 AI교육원 진입로" data-route="donggwangju-ai" data-seq="6" data-source-road="gray-road-35">
+        <path id="traffic-dg-06" inkscape:label="DG-06 상태선" d="m 265,155.06861 v 34.14762" fill="none" stroke="#E84393" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="donggwangju-ai" data-seq="6" data-source-road="gray-road-35" opacity="0.94"/>
+      </g>
+    </g>
+    <g id="traffic-route-yongbong" inkscape:label="용봉중→AI교육원 (YB 01-03 + DG-06 공통)" data-route="yongbong-ai"><g id="traffic-yb-segment-01" inkscape:label="YB-01 용봉중 버스정류장→북부소방서 인근" data-route="yongbong-ai" data-seq="1" data-source-road="gray-road-01"><path id="traffic-yb-01" inkscape:label="YB-01 상태선" d="M 12,183 L 145,185.75" fill="none" stroke="#D35400" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="yongbong-ai" data-seq="1" data-source-road="gray-road-01" opacity="0.94"/></g><g id="traffic-yb-segment-02" inkscape:label="YB-02 북부소방서 인근→문우초 서측" data-route="yongbong-ai" data-seq="2" data-source-road="gray-road-01+28"><path id="traffic-yb-02" inkscape:label="YB-02 상태선" d="M 145,185.75 L 161.9,186.1 L 211,188" fill="none" stroke="#F1C40F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="yongbong-ai" data-seq="2" data-source-road="gray-road-01+28" opacity="0.94"/></g><g id="traffic-yb-segment-03" inkscape:label="YB-03 문우초 서측→AI교육원 남측 교차점" data-route="yongbong-ai" data-seq="3" data-source-road="gray-road-24"><path id="traffic-yb-03" inkscape:label="YB-03 상태선" d="M 211,188 L 265,189" fill="none" stroke="#27AE60" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="traffic-segment" data-status="unknown" data-route="yongbong-ai" data-seq="3" data-source-road="gray-road-24" opacity="0.94"/></g><g id="traffic-yb-segment-04-ref" inkscape:label="YB-04 공통 진입구간 → traffic-dg-06 사용" data-route="yongbong-ai" data-seq="4" data-shared-segment="traffic-dg-06"/></g>
+  <g id="traffic-direction-arrows" inkscape:label="교통 진행방향 화살표" pointer-events="none" opacity="0.96">
+    <!-- 화살표는 모두 AI교육원 방향을 가리킴. 흰색 chevron, 상태선 색상과 독립 -->
+    <g id="traffic-direction-dg" inkscape:label="동광주IC→AI교육원 방향 화살표"
+       fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <!-- DG-01: IC → 연결부 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(560 304) rotate(160)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(540 312) rotate(160)"/>
+
+      <!-- DG-02: 연결부 → 문화사거리 방향 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(500 302) rotate(-148)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(470 283) rotate(-148)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(440 264) rotate(-148)"/>
+
+      <!-- DG-03 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(400 240) rotate(-148)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(375 224) rotate(-148)"/>
+
+      <!-- DG-04 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(342 203) rotate(-145)"/>
+
+      <!-- DG-05 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(312 192) rotate(182)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(285 189.5) rotate(182)"/>
+
+      <!-- DG-06 / YB-04 공용 최종 진입로 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(265 178) rotate(-90)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(265 165) rotate(-90)"/>
+    </g>
+
+    <g id="traffic-direction-yb" inkscape:label="용봉중→AI교육원 방향 화살표"
+       fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <!-- YB-01 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(48 183.7) rotate(1.2)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(92 184.7) rotate(1.2)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(132 185.5) rotate(1.2)"/>
+
+      <!-- YB-02 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(164 186.1) rotate(2)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(195 187.4) rotate(2)"/>
+
+      <!-- YB-03 -->
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(224 188.2) rotate(1.1)"/>
+      <path d="M -4,-3 L 0,0 L -4,3" transform="translate(249 188.7) rotate(1.1)"/>
+    </g>
+  </g>
+<g id="traffic-dg-markers" inkscape:label="DG 구간번호 (확인용)">
+      <g id="traffic-dg-marker-01" inkscape:label="DG-01 번호">
+        <circle id="traffic-dg-marker-circle-01" cx="547" cy="297" r="8.5" fill="#ffffff" stroke="#8e5cf6" stroke-width="2.2"/>
+        <text id="traffic-dg-marker-text-01" x="547" y="300" text-anchor="middle" font-size="8.5px" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">1</text>
+      </g>
+      <g id="traffic-dg-marker-02" inkscape:label="DG-02 번호">
+        <circle id="traffic-dg-marker-circle-02" cx="468" cy="270" r="8.5" fill="#ffffff" stroke="#2D9CDB" stroke-width="2.2"/>
+        <text id="traffic-dg-marker-text-02" x="468" y="273" text-anchor="middle" font-size="8.5" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">2</text>
+      </g>
+      <g id="traffic-dg-marker-03" inkscape:label="DG-03 번호">
+        <circle id="traffic-dg-marker-circle-03" cx="390" cy="232" r="8.5" fill="#ffffff" stroke="#00B7C2" stroke-width="2.2"/>
+        <text id="traffic-dg-marker-text-03" x="390" y="235" text-anchor="middle" font-size="8.5" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">3</text>
+      </g>
+      <g id="traffic-dg-marker-04" inkscape:label="DG-04 번호">
+        <circle id="traffic-dg-marker-circle-04" cx="342" cy="203" r="8.5" fill="#ffffff" stroke="#00B894" stroke-width="2.2"/>
+        <text id="traffic-dg-marker-text-04" x="342" y="206" text-anchor="middle" font-size="8.5" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">4</text>
+      </g>
+      <g id="traffic-dg-marker-05" inkscape:label="DG-05 번호">
+        <circle id="traffic-dg-marker-circle-05" cx="292" cy="186" r="8.5" fill="#ffffff" stroke="#F39C12" stroke-width="2.2"/>
+        <text id="traffic-dg-marker-text-05" x="292" y="189" text-anchor="middle" font-size="8.5" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">5</text>
+      </g>
+      <g id="traffic-dg-marker-06" inkscape:label="DG-06 번호">
+        <circle id="traffic-dg-marker-circle-06" cx="265" cy="171" r="8.5" fill="#ffffff" stroke="#E84393" stroke-width="2.2"/>
+        <text id="traffic-dg-marker-text-06" x="265" y="174" text-anchor="middle" font-size="8.5" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">6</text>
+      </g>
+    </g>
+  <g id="traffic-yb-markers" inkscape:label="YB 구간번호 (확인용)"><g id="traffic-yb-marker-01" inkscape:label="YB-01 번호"><circle id="traffic-yb-marker-circle-01" cx="78.5" cy="184.4" r="8.5" fill="#ffffff" stroke="#D35400" stroke-width="2.2"/><text id="traffic-yb-marker-text-01" x="78.5" y="187.4" text-anchor="middle" font-size="8.5px" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">1</text></g><g id="traffic-yb-marker-02" inkscape:label="YB-02 번호"><circle id="traffic-yb-marker-circle-02" cx="178.0" cy="186.7" r="8.5" fill="#ffffff" stroke="#F1C40F" stroke-width="2.2"/><text id="traffic-yb-marker-text-02" x="178.0" y="189.7" text-anchor="middle" font-size="8.5px" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">2</text></g><g id="traffic-yb-marker-03" inkscape:label="YB-03 번호"><circle id="traffic-yb-marker-circle-03" cx="238.0" cy="188.5" r="8.5" fill="#ffffff" stroke="#27AE60" stroke-width="2.2"/><text id="traffic-yb-marker-text-03" x="238.0" y="191.5" text-anchor="middle" font-size="8.5px" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">3</text></g><g id="traffic-yb-marker-04" inkscape:label="YB-04 번호 (DG-06 공통)"><circle id="traffic-yb-marker-circle-04" cx="251.5" cy="169.5" r="8.5" fill="#ffffff" stroke="#7B61FF" stroke-width="2.2"/><text id="traffic-yb-marker-text-04" x="251.5" y="172.5" text-anchor="middle" font-size="8.5px" font-family="Noto Sans KR, sans-serif" font-weight="800" fill="#222222">4</text></g></g></g>
+</svg>

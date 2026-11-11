@@ -1,0 +1,42 @@
+/* 디자인 토큰: 박람회(AI교육원) 대시보드 데모 페이지의 값을 그대로 옮김.
+   박람회 사이트에 붙일 때 이 파일만 맞추면 색감이 같이 바뀐다. */
+:root {
+  --blue: #075fae;
+  --blue-dark: #064f91;
+  --blue-soft: #e8f1fa;
+  --sky: #a8d2eb;
+  --yellow: #ffe33d;
+  --pin: #ff7d34;
+  --text: #20252a;
+  --muted: #71808d;
+  --line: #dce3e9;
+  --page: #eef4f8;
+  --panel: #fff;
+  --panel-sub: #f5f8fa;
+
+  /* 혼잡도 3단계 + 확인 불가 */
+  --free: #35b86b;
+  --free-dark: #168d49;
+  --normal: #f5a623;
+  --normal-dark: #d68200;
+  --busy: #e54b4b;
+  --busy-dark: #bd2d2d;
+  --unknown: #77828c;
+
+  /* CCTV 영역 (어두운 패널) */
+  --cctv-bg: #111820;
+  --cctv-panel: #19232d;
+  --cctv-line: #293541;
+  --cctv-muted: #8f9ba6;
+  --cam-free: #30a765;
+  --cam-normal: #d59b28;
+  --cam-busy: #d55048;
+  --cam-unknown: #555d65;
+
+  --radius-lg: 16px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 7px rgba(40, 65, 83, .06);
+  --shadow-lg: 0 3px 12px rgba(42, 73, 99, .10);
+  --font: "Noto Sans KR", sans-serif;
+}

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>행사장 실시간 혼잡도</title>
+<meta name="description" content="현장 CCTV 분석으로 보는 행사장 실시간 혼잡도 (여유 · 보통 · 혼잡)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 32%27%3E%3Cpath fill=%27%23ff7d34%27 d=%27M12 0C5.7 0 .8 4.8.8 10.8.8 19.2 12 31 12 31s11.2-11.8 11.2-20.2C23.2 4.8 18.3 0 12 0Z%27/%3E%3Ccircle cx=%2712%27 cy=%2710.5%27 r=%274%27 fill=%27%23fff%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="dashboard">
+
+  <header class="dashboard-header">
+    <div class="dashboard-title">
+      <svg class="pin-icon" viewBox="0 0 24 32" aria-hidden="true">
+        <path fill="#ff7d34" d="M12 0C5.7 0 .8 4.8.8 10.8.8 19.2 12 31 12 31s11.2-11.8 11.2-20.2C23.2 4.8 18.3 0 12 0Z"/>
+        <circle cx="12" cy="10.5" r="4" fill="#fff"/>
+      </svg>
+      <span><strong>AI교육원</strong> 행사장 실시간 혼잡도</span>
+    </div>
+    <div class="status-legend" aria-label="혼잡도 범례">
+      <span class="legend-item"><i class="legend-ring free"></i>여유</span>
+      <span class="legend-item"><i class="legend-ring normal"></i>보통</span>
+      <span class="legend-item"><i class="legend-ring busy"></i>혼잡</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="map-section">
+      <div class="map-panel">
+        <div class="map-scroll">
+          <div id="mapMount" class="map-loading">지도 불러오는 중...</div>
+        </div>
+      </div>
+      <div class="data-status">AI교육원 표시 색 = 행사장 현재 혼잡도</div>
+    </section>
+
+    <section class="section" id="live-section">
+      <div class="section-heading">
+        <div>
+          <h2>실시간 행사장 혼잡도</h2>
+          <div class="section-sub">현장 CCTV를 AI가 분석한 현재 화면 인원 · 사람은 모두 흐림 처리됩니다</div>
+        </div>
+        <button class="link-button" id="openFirstCam" type="button">CCTV 크게 보기</button>
+      </div>
+
+      <div class="cctv-shell">
+        <div class="cctv-summary">
+          <div class="cctv-summary-item">
+            <div class="cctv-summary-label">현재 화면 사람</div>
+            <div class="cctv-summary-value" id="totalHumanBox"><span id="totalHuman">-</span> <span class="cctv-summary-unit">명</span></div>
+          </div>
+          <div class="cctv-summary-item">
+            <div class="cctv-summary-label">혼잡도</div>
+            <div class="cctv-summary-value" id="totalLevel"><span class="level-badge unknown">확인 중</span></div>
+          </div>
+          <div class="cctv-summary-item">
+            <div class="cctv-summary-label">CCTV</div>
+            <div class="cctv-summary-value" id="cctvBox"><span id="activeCount">-</span> <span class="cctv-summary-unit" id="cameraTotal">/-</span></div>
+          </div>
+        </div>
+        <div class="camera-grid" id="cameraGrid" aria-live="off"></div>
+        <div class="cctv-footer">
+          <div class="cctv-legend">
+            <span class="cctv-legend-item"><i class="cctv-dot free"></i>여유</span>
+            <span class="cctv-legend-item"><i class="cctv-dot normal"></i>보통</span>
+            <span class="cctv-legend-item"><i class="cctv-dot busy"></i>혼잡</span>
+            <span class="cctv-legend-item"><i class="cctv-dot unknown"></i>확인 불가</span>
+          </div>
+          <div><span id="refreshTime">연결 중</span> · <span id="criteria">기준 -</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="trend-section">
+      <div class="section-heading">
+        <div>
+          <h2>오늘 시간대별 혼잡 추이</h2>
+          <div class="section-sub">시간대별 <b>평균 동시 인원</b> (그 시간 동안 화면에 평균적으로 보인 사람 수 · 누적 방문자 수 아님)</div>
+        </div>
+      </div>
+      <div class="card">
+        <div id="hourlyChart" class="map-loading" style="min-height:150px">불러오는 중...</div>
+        <div class="chart-legend">
+          <span><i style="background:var(--blue)"></i>평균 동시 인원</span>
+          <span><i style="background:var(--pin)"></i>지금 시간대</span>
+          <span><i style="background:var(--free);opacity:.35"></i>여유 구간</span>
+          <span><i style="background:var(--busy);opacity:.35"></i>혼잡 구간</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="CCTV 확대 화면">
+  <button class="modal-close" id="modalClose" aria-label="닫기">×</button>
+  <div class="modal-content">
+    <div class="modal-stage" id="modalStage">
+      <img id="modalImage" class="camera-image" alt="">
+      <svg id="modalOverlay" class="camera-overlay" aria-hidden="true"></svg>
+      <div class="camera-down" id="modalDown" hidden><div>확인 불가<small>CCTV 신호를 받지 못하고 있습니다</small></div></div>
+    </div>
+    <div id="modalInfo" class="modal-info"></div>
+  </div>
+</div>
+
+<script type="module" src="js/public.js"></script>
+</body>
+</html>

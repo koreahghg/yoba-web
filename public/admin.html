@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>혼잡도 관리자</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 32%27%3E%3Cpath fill=%27%23ff7d34%27 d=%27M12 0C5.7 0 .8 4.8.8 10.8.8 19.2 12 31 12 31s11.2-11.8 11.2-20.2C23.2 4.8 18.3 0 12 0Z%27/%3E%3Ccircle cx=%2712%27 cy=%2710.5%27 r=%274%27 fill=%27%23fff%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="dashboard">
+  <header class="dashboard-header">
+    <div class="dashboard-title">
+      <svg class="pin-icon" viewBox="0 0 24 32" aria-hidden="true">
+        <path fill="#ff7d34" d="M12 0C5.7 0 .8 4.8.8 10.8.8 19.2 12 31 12 31s11.2-11.8 11.2-20.2C23.2 4.8 18.3 0 12 0Z"/>
+        <circle cx="12" cy="10.5" r="4" fill="#fff"/>
+      </svg>
+      <span><strong>AI교육원</strong> 혼잡도 관리</span>
+      <span class="tag">관리자</span>
+    </div>
+    <div class="header-actions">
+      <a class="link-button" href="./" target="_blank" rel="noopener">방문객 화면</a>
+      <button class="link-button" id="logoutBtn" type="button" hidden>로그아웃</button>
+    </div>
+  </header>
+
+  <!-- 로그인 -->
+  <section id="loginView" class="login-wrap" hidden>
+    <form class="card login-card" id="loginForm">
+      <h3>관리자 로그인</h3>
+      <div class="hint">혼잡도 기준을 바꿀 수 있는 화면이라 로그인이 필요합니다.</div>
+      <label for="password">비밀번호</label>
+      <input class="input" id="password" type="password" autocomplete="current-password" required>
+      <div class="form-error" id="loginError"></div>
+      <button class="btn primary" type="submit" style="width:100%;justify-content:center">로그인</button>
+    </form>
+  </section>
+
+  <!-- 대시보드 -->
+  <main id="adminView" hidden>
+    <div class="demo-note" id="demoNote" hidden>
+      <span>데모 모드입니다. 실제 CCTV·Redis가 아닌 가짜 데이터가 표시됩니다.</span>
+      <button class="btn danger" id="outageBtn" type="button">데모: 카메라 8초 끊기</button>
+    </div>
+
+    <section class="section">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">현재 화면 사람</div><div class="kpi-value" id="kCount">-<small>명</small></div><div class="kpi-sub" id="kCountSub">스무딩 값</div></div>
+        <div class="kpi"><div class="kpi-label">현재 혼잡도</div><div class="kpi-value" id="kLevel">-</div><div class="kpi-sub" id="kLevelSub">-</div></div>
+        <div class="kpi"><div class="kpi-label">CCTV</div><div class="kpi-value" id="kCctv">-</div><div class="kpi-sub" id="kCctvSub">-</div></div>
+        <div class="kpi"><div class="kpi-label">오늘 블러 검증 실패</div><div class="kpi-value" id="kBlur">-<small>회</small></div><div class="kpi-sub">실패한 프레임은 검은 화면으로 대체</div></div>
+      </div>
+    </section>
+
+    <section class="section admin-grid">
+      <!-- 기준값 -->
+      <div class="card span-7">
+        <h3>혼잡도 기준 (사람 수)</h3>
+        <div class="hint">현재 화면 사람 수로 3단계를 정합니다. 저장하면 방문객 화면에 바로 반영됩니다.</div>
+        <form id="thForm">
+          <div class="th-row" style="margin-top:10px">
+            <div class="th-field">
+              <div class="head"><span class="level-badge free sm">여유</span></div>
+              <div class="control"><input class="input" id="freeMax" type="number" min="0" step="1" required inputmode="numeric"> 명 이하</div>
+            </div>
+            <div class="th-field">
+              <div class="head"><span class="level-badge busy sm">혼잡</span></div>
+              <div class="control"><input class="input" id="busyMin" type="number" min="1" step="1" required inputmode="numeric"> 명 이상</div>
+            </div>
+          </div>
+          <div class="scale" aria-hidden="true">
+            <div class="scale-now" id="scaleNow"></div>
+            <div class="scale-bar" id="scaleBar">
+              <div style="background:var(--free)"></div><div style="background:var(--normal)"></div><div style="background:var(--busy)"></div>
+            </div>
+            <div class="scale-labels" id="scaleLabels"></div>
+          </div>
+          <div class="preview" id="preview">-</div>
+
+          <details class="zone-th" id="zoneThBox" hidden>
+            <summary>구역별 기준 따로 정하기 (선택)</summary>
+            <div class="hint" style="margin-top:4px">비워 두면 해당 구역 테두리는 전체 기준 단계 색을 따릅니다.</div>
+            <div id="zoneThList"></div>
+          </details>
+
+          <div class="actions">
+            <button class="btn primary" type="submit" id="saveBtn">저장하고 바로 반영</button>
+            <button class="btn" type="button" id="resetBtn">되돌리기</button>
+            <span class="form-error" id="thError"></span><span class="form-ok" id="thOk"></span>
+          </div>
+        </form>
+      </div>
+
+      <!-- 처리 상태 -->
+      <div class="card span-5">
+        <h3>처리 상태</h3>
+        <div class="status-list" id="statusList"><div class="hint">불러오는 중...</div></div>
+      </div>
+
+      <!-- 통계 -->
+      <div class="card span-12">
+        <div class="section-heading" style="margin:0 0 8px">
+          <div>
+            <h3 style="margin:0">1시간 단위 평균 동시 인원</h3>
+            <div class="hint">그 시간 동안 화면에 평균적으로 보인 사람 수입니다. 사람을 추적하지 않으므로 <b>누적 방문자 수가 아닙니다.</b> 카메라가 꺼진 시간은 평균에서 제외됩니다.</div>
+          </div>
+          <div class="toolbar">
+            <input class="input" type="date" id="statDate" aria-label="날짜">
+            <button class="btn" type="button" id="csvHour">CSV · 시간별</button>
+            <button class="btn" type="button" id="csvMinute">CSV · 분별</button>
+          </div>
+        </div>
+        <div id="statChart"></div>
+        <div class="chart-legend">
+          <span><i style="background:var(--blue)"></i>평균 동시 인원</span>
+          <span><i style="background:var(--text);height:3px;vertical-align:3px"></i>최대 동시 인원</span>
+          <span><i style="background:var(--free);opacity:.35"></i>여유 구간</span>
+          <span><i style="background:var(--busy);opacity:.35"></i>혼잡 구간</span>
+        </div>
+        <div class="table-scroll" style="margin-top:10px;max-height:340px">
+          <table class="data">
+            <thead><tr><th>시간대</th><th>평균 동시 인원</th><th>최대 동시 인원</th><th>피크 시각</th><th>정상 수신률</th><th>블러 실패</th></tr></thead>
+            <tbody id="statBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card span-12">
+        <h3>변경 기록</h3>
+        <div class="log-list" id="logList"></div>
+      </div>
+    </section>
+  </main>
+</div>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

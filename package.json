@@ -1,0 +1,22 @@
+{
+  "name": "yoba-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "YOBA CCTV 혼잡도 실시간 웹 (공개 화면 + 어드민)",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "demo": "node --env-file-if-exists=.env server/index.js --demo",
+    "fake-yoba": "node --env-file-if-exists=.env tools/fake-yoba.js",
+    "check-redis": "node --env-file-if-exists=.env tools/check-redis.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "ioredis": "^5.6.1",
+    "ws": "^8.18.2"
+  }
+}
