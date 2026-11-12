@@ -238,6 +238,70 @@ const csv = (unit) => (location.href = `api/admin/export.csv?date=${$('#statDate
 $('#csvHour').addEventListener('click', () => csv('hour'));
 $('#csvMinute').addEventListener('click', () => csv('minute'));
 
+// ---------- 지도 (주차장 · 도로) ----------
+const PARKING_OPTS = [['free', '여유'], ['busy', '혼잡'], ['full', '만차'], ['unknown', '확인중']];
+const TRAFFIC_OPTS = [['auto', '자동'], ['free', '원활'], ['busy', '서행'], ['jam', '정체'], ['unknown', '확인중']];
+const PARKING_LABEL = Object.fromEntries(PARKING_OPTS);
+const TRAFFIC_LABEL = Object.fromEntries(TRAFFIC_OPTS); // 같은 busy라도 주차는 '혼잡', 도로는 '서행'
+let mapDetail = null;
+const nameOf = (id) => mapDetail?.parking.find((p) => p.id === id)?.name ?? mapDetail?.traffic.find((t) => t.id === id)?.name ?? id;
+
+function seg(opts, current, onPick, label) {
+  return el('div', { class: 'seg', role: 'group', 'aria-label': label },
+    ...opts.map(([v, text]) => el('button', {
+      type: 'button', class: v, 'aria-pressed': String(v === current), text,
+      onclick: () => v !== current && onPick(v),
+    })));
+}
+
+async function putMap(body) {
+  $('#mapError').textContent = '';
+  try {
+    mapDetail = await api('map', { method: 'PUT', body });
+    renderMap();
+    loadLog();
+  } catch (e) {
+    $('#mapError').textContent = e.message;
+  }
+}
+
+function renderMap() {
+  if (!mapDetail) return;
+  $('#parkingRows').replaceChildren(...mapDetail.parking.map((p) => el('div', { class: 'map-row' },
+    el('span', {}, p.name, el('small', { text: p.updated_at ? `${timeText(p.updated_at, false)} 변경` : '아직 안 정함' })),
+    seg(PARKING_OPTS, p.status, (v) => putMap({ parking: { [p.id]: v } }), `${p.name} 주차 상태`),
+  )));
+
+  const its = mapDetail.its;
+  $('#itsStatus').textContent = !its.enabled
+    ? '자동 수집 꺼짐 (ITS_API_KEY 없음) · 직접 눌러서 정해 주세요. "자동"은 확인중으로 보입니다.'
+    : its.fresh
+      ? `ITS 자동 수집 중 · ${timeText(its.last_ok_at, false)} 갱신 · 링크 ${its.links}개`
+      : `ITS 수신 안 됨${its.error ? ` (${its.error})` : ''} · "자동" 구간은 확인중으로 보입니다.`;
+  $('#trafficRows').replaceChildren(...mapDetail.traffic.map((t) => {
+    const autoText = !t.linked ? 'ITS 링크 미연결'
+      : t.speed === null ? '자동값 없음' : `자동: ${t.speed}km/h → ${TRAFFIC_LABEL[t.auto_status]}`;
+    return el('div', { class: 'map-row' },
+      el('span', {}, t.name, el('small', { text: `${autoText} · 지금 ${TRAFFIC_LABEL[t.status]}` })),
+      seg(TRAFFIC_OPTS, t.mode, (v) => putMap({ traffic: { [t.id]: v } }), `${t.name} 도로 상태`),
+    );
+  }));
+}
+
+async function loadMap() {
+  try {
+    mapDetail = await api('map');
+    renderMap();
+  } catch { /* 401이면 api()가 처리 */ }
+}
+
+document.querySelectorAll('[data-all]').forEach((b) => b.addEventListener('click', () => {
+  if (!mapDetail) return;
+  const v = b.dataset.all;
+  if (!confirm(`주차장 ${mapDetail.parking.length}곳을 모두 "${PARKING_LABEL[v]}"(으)로 바꿀까요?`)) return;
+  putMap({ parking: Object.fromEntries(mapDetail.parking.map((p) => [p.id, v])) });
+}));
+
 // ---------- 변경 기록 ----------
 async function loadLog() {
   try {
@@ -245,6 +309,13 @@ async function loadLog() {
     $('#logList').replaceChildren(
       ...(log.length ? log : [null]).map((r) => {
         if (!r) return el('div', { text: '아직 변경 기록이 없습니다.' });
+        if (r.action === 'map') {
+          const parts = [
+            ...Object.entries(r.detail?.parking ?? {}).map(([id, s]) => `${nameOf(id)} ${PARKING_LABEL[s] ?? s}`),
+            ...Object.entries(r.detail?.traffic ?? {}).map(([id, s]) => `${nameOf(id)} ${TRAFFIC_LABEL[s] ?? s}`),
+          ];
+          return el('div', {}, el('b', { text: new Date(r.ts).toLocaleString('ko-KR') }), ' · 지도 ', el('b', { text: parts.join(', ') }));
+        }
         const a = r.detail?.after?.total;
         const b = r.detail?.before?.total;
         return el('div', {},
@@ -266,10 +337,12 @@ async function start() {
   await loadSettings();
   loadStatus();
   loadStats();
+  await loadMap();
   loadLog();
   if (started) return;
   started = true;
   setInterval(loadStatus, 1000);
+  setInterval(loadMap, 30_000); // 다른 관리자가 바꾼 값·ITS 자동값 반영
   setInterval(loadStats, 60_000);
   subscribeState({
     onState(s) {

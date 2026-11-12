@@ -12,6 +12,7 @@
     "demo": "node --env-file-if-exists=.env server/index.js --demo",
     "fake-yoba": "node --env-file-if-exists=.env tools/fake-yoba.js",
     "check-redis": "node --env-file-if-exists=.env tools/check-redis.js",
+    "its-links": "node --env-file-if-exists=.env tools/its-links.js",
     "test": "node --test test/"
   },
   "dependencies": {

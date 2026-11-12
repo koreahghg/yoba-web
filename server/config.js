@@ -29,5 +29,7 @@ export function loadConfig(argv = process.argv) {
     streamMaxFps: num('STREAM_MAX_FPS', 8),
     streamMaxClients: num('STREAM_MAX_CLIENTS', 30),
     trustProxy: process.env.TRUST_PROXY === '1',
+    itsApiKey: demo ? '' : process.env.ITS_API_KEY || '',
+    itsIntervalSec: num('ITS_INTERVAL_SEC', 120),
   };
 }

@@ -101,6 +101,18 @@ export function openStore(path) {
     saveSettings(settings) {
       putSetting.run('thresholds', JSON.stringify(settings));
     },
+    getJson(key, fallback) {
+      const row = getSetting.get(key);
+      if (!row) return fallback;
+      try {
+        return JSON.parse(row.value);
+      } catch {
+        return fallback;
+      }
+    },
+    putJson(key, value) {
+      putSetting.run(key, JSON.stringify(value));
+    },
 
     /** rows: [{camera_id, online, count, raw, blur_fail}] — 한 트랜잭션 */
     recordSamples(ts, rows) {

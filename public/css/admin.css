@@ -52,6 +52,21 @@ details.zone-th summary { cursor: pointer; font-weight: 800; color: var(--blue);
 .zone-th-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 6px; align-items: center; margin-top: 6px; font-weight: 700; }
 .zone-th-row .input { width: 70px; padding: 5px 6px; font-size: 13px; text-align: right; }
 
+/* 지도 상태 */
+.map-rows { display: grid; gap: 4px; margin-top: 8px; }
+.map-row { display: grid; grid-template-columns: minmax(90px, 1fr) auto; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px dashed var(--line); font-size: 12px; font-weight: 800; }
+.map-row:last-child { border-bottom: 0; }
+.map-row small { display: block; font-size: 10px; color: var(--muted); font-weight: 600; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; background: #fff; }
+.seg button { border: 0; border-right: 1px solid var(--line); background: none; padding: 5px 8px; font-size: 11px; font-weight: 800; color: var(--muted); cursor: pointer; }
+.seg button:last-child { border-right: 0; }
+.seg button:hover { background: var(--panel-sub); }
+.seg button[aria-pressed="true"].free { background: var(--free); color: #fff; }
+.seg button[aria-pressed="true"].busy { background: var(--normal); color: #fff; }
+.seg button[aria-pressed="true"].full, .seg button[aria-pressed="true"].jam { background: var(--busy); color: #fff; }
+.seg button[aria-pressed="true"].unknown { background: var(--unknown); color: #fff; }
+.seg button[aria-pressed="true"].auto { background: var(--blue); color: #fff; }
+
 /* 표 */
 .table-scroll { overflow-x: auto; }
 table.data { width: 100%; border-collapse: collapse; font-size: 12px; }

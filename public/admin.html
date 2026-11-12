@@ -103,6 +103,23 @@
         <div class="status-list" id="statusList"><div class="hint">불러오는 중...</div></div>
       </div>
 
+      <!-- 지도 상태 -->
+      <div class="card span-6">
+        <h3>지도 · 주차장</h3>
+        <div class="hint">현장에서 보고 눌러 주세요. 누르는 즉시 방문객 지도에 반영됩니다.</div>
+        <div class="map-rows" id="parkingRows"></div>
+        <div class="actions">
+          <button class="btn" type="button" data-all="free">전체 여유</button>
+          <button class="btn" type="button" data-all="unknown">전체 확인중</button>
+          <span class="form-error" id="mapError"></span>
+        </div>
+      </div>
+      <div class="card span-6">
+        <h3>지도 · 도로 (동광주IC → AI교육원)</h3>
+        <div class="hint" id="itsStatus">-</div>
+        <div class="map-rows" id="trafficRows"></div>
+      </div>
+
       <!-- 통계 -->
       <div class="card span-12">
         <div class="section-heading" style="margin:0 0 8px">

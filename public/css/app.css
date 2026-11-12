@@ -63,9 +63,32 @@ body { margin: 0; color: var(--text); background: var(--page); }
 .map-svg { display: block; width: 100%; height: auto; min-width: 650px; }
 #map-svg text, #map-svg tspan { font-family: var(--font) !important; font-style: normal !important; font-weight: 800 !important; }
 #map-svg .parking-status { stroke-width: 3 !important; fill-opacity: .28 !important; }
+#map-svg .parking-status { transition: fill .3s, stroke .3s; }
+#map-svg .status-free { fill: var(--free) !important; stroke: var(--free) !important; }
+#map-svg .status-busy { fill: var(--normal) !important; stroke: var(--normal) !important; }
+#map-svg .status-full { fill: var(--busy) !important; stroke: var(--busy) !important; fill-opacity: .34 !important; }
 #map-svg .status-unknown { fill: var(--unknown) !important; stroke: var(--unknown) !important; fill-opacity: .20 !important; }
-#map-svg .traffic-segment { fill: none !important; stroke-width: 7 !important; stroke-linecap: round !important; }
+#map-svg .traffic-segment { fill: none !important; stroke-width: 7 !important; stroke-linecap: round !important; transition: stroke .5s, opacity .25s; }
+#map-svg .traffic-segment.traffic-free { stroke: var(--free) !important; opacity: .96 !important; }
+#map-svg .traffic-segment.traffic-busy { stroke: var(--normal) !important; opacity: .96 !important; }
+#map-svg .traffic-segment.traffic-jam { stroke: var(--busy) !important; opacity: .96 !important; }
 #map-svg .traffic-segment.traffic-unknown { stroke: var(--unknown) !important; opacity: .35 !important; }
+
+.map-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 6px; font-size: 11px; color: var(--muted); font-weight: 700; }
+.map-legend-group { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.map-legend-group b { color: var(--text); font-weight: 800; }
+.map-legend-group span { display: inline-flex; align-items: center; gap: 3px; }
+.map-legend-note { margin-left: auto; font-size: 10px; color: #8996a0; }
+.map-legend .pk { width: 11px; height: 11px; border-radius: 50%; border: 2.5px solid; }
+.map-legend .rd { width: 16px; height: 4px; border-radius: 2px; }
+.map-legend .pk.free { border-color: var(--free); background: rgba(53, 184, 107, .28); }
+.map-legend .pk.busy { border-color: var(--normal); background: rgba(245, 166, 35, .28); }
+.map-legend .pk.full { border-color: var(--busy); background: rgba(229, 75, 75, .34); }
+.map-legend .pk.unknown { border-color: var(--unknown); background: rgba(119, 130, 140, .2); }
+.map-legend .rd.free { background: var(--free); }
+.map-legend .rd.busy { background: var(--normal); }
+.map-legend .rd.jam { background: var(--busy); }
+.map-legend .rd.unknown { background: var(--unknown); opacity: .5; }
 #map-svg #traffic-dg-markers { display: none; }
 #map-svg #ai-congestion-ring, #map-svg #ai-congestion-badge { transition: stroke .4s, fill .4s; }
 @keyframes ring-pulse { 0%, 100% { opacity: .95; } 50% { opacity: .45; } }

@@ -10,6 +10,9 @@ import { WebSocketServer } from 'ws';
 import { createAuth } from './auth.js';
 import { loadConfig } from './config.js';
 import { createFrameHub } from './frames.js';
+import { createIts } from './its.js';
+import { ITS_BBOX } from './map-config.js';
+import { createMapState, validateMapUpdate } from './map-state.js';
 import { createDemoSource } from './source/demo.js';
 import { createRedisSource } from './source/redis.js';
 import { LiveState, validateThresholds } from './state.js';
@@ -26,6 +29,8 @@ const frames = createFrameHub(cfg, source, log);
 const auth = createAuth(cfg.adminPassword);
 const record = createRecorder(store);
 let settings = store.getSettings();
+const its = createIts({ apiKey: cfg.itsApiKey, bbox: ITS_BBOX, intervalSec: cfg.itsIntervalSec }, log);
+const mapState = createMapState(store, its, { intervalSec: cfg.itsIntervalSec });
 
 // ---------- 수집 루프 ----------
 let reading = false;
@@ -53,7 +58,7 @@ setInterval(() => {
 }, 1000);
 
 function publicState() {
-  const snap = state.publicSnapshot(settings, Date.now(), { source: source.kind });
+  const snap = state.publicSnapshot(settings, Date.now(), { source: source.kind, map: mapState.snapshot() });
   for (const c of snap.cameras) c.has_frame = c.online && frames.hasFreshFrame(c.id);
   return snap;
 }
@@ -195,7 +200,18 @@ admin.get('/export.csv', (req, res) => {
   res.send(body);
 });
 
-admin.get('/log', (req, res) => res.json({ log: store.recentLog(30) }));
+admin.get('/map', (req, res) => res.json(mapState.detail()));
+
+admin.put('/map', (req, res) => {
+  const err = validateMapUpdate(req.body);
+  if (err) return res.status(400).json({ error: err });
+  mapState.update(req.body);
+  store.log('map', req.body);
+  broadcast(); // 저장 즉시 반영
+  res.json(mapState.detail());
+});
+
+admin.get('/log',(req, res) => res.json({ log: store.recentLog(30) }));
 
 admin.post('/demo/outage', (req, res) => {
   if (!cfg.demo) return res.status(404).json({ error: '데모 모드에서만 가능' });

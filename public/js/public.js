@@ -20,13 +20,12 @@ async function loadMap() {
     svg.classList.add('map-svg');
     svg.removeAttribute('width');
     svg.removeAttribute('height');
-    // 주차·교통 데이터는 아직 연결 전 → 임의의 색 대신 회색(확인 중)으로 둔다
-    svg.querySelectorAll('.parking-status').forEach((c) => {
-      c.classList.remove('status-free', 'status-busy', 'status-full');
-      c.classList.add('status-unknown');
-    });
-    svg.querySelectorAll('.traffic-segment').forEach((p) => p.classList.add('traffic-unknown'));
-    if (latest) setMapLevel(latest.total.level);
+    // 서버 값을 받기 전에는 SVG에 그려 둔 임의 색 대신 회색(확인 중)으로 시작
+    applyMapStatus({ parking: {}, traffic: {} }, svg);
+    if (latest) {
+      setMapLevel(latest.total.level);
+      applyMapStatus(latest.map);
+    }
   } catch (e) {
     mount.textContent = `지도 불러오기 실패 · ${e.message}`;
   }
@@ -43,6 +42,24 @@ function setMapLevel(level) {
   }
   if (badge) badge.setAttribute('fill', meta.hex);
   if (text) text.textContent = level === 'unknown' ? '확인불가' : meta.label;
+}
+
+const PARKING_CLASSES = ['status-free', 'status-busy', 'status-full', 'status-unknown'];
+const TRAFFIC_CLASSES = ['traffic-free', 'traffic-busy', 'traffic-jam', 'traffic-unknown'];
+
+/** map: {parking: {svgId: free|busy|full|unknown}, traffic: {svgId: free|busy|jam|unknown}} */
+function applyMapStatus(map, root = document.getElementById('map-svg')) {
+  if (!root || !map) return;
+  root.querySelectorAll('.parking-status').forEach((c) => {
+    const s = map.parking?.[c.id] ?? 'unknown';
+    c.classList.remove(...PARKING_CLASSES);
+    c.classList.add(`status-${s}`);
+  });
+  root.querySelectorAll('.traffic-segment').forEach((p) => {
+    const s = map.traffic?.[p.id] ?? 'unknown';
+    p.classList.remove(...TRAFFIC_CLASSES);
+    p.classList.add(`traffic-${s}`);
+  });
 }
 
 // ---------- CCTV 타일 ----------
@@ -120,6 +137,7 @@ function renderSummary(state) {
   const th = state.thresholds;
   $('#criteria').textContent = `기준: ${th.free_max}명 이하 여유 · ${th.busy_min}명 이상 혼잡`;
   setMapLevel(total.level);
+  applyMapStatus(state.map);
 }
 
 // 3초 넘게 새 값이 없으면 (서버·네트워크 장애) 화면 전체를 확인 불가로
@@ -127,6 +145,7 @@ function markAllUnknown() {
   if (!latest) return;
   const dead = {
     ...latest,
+    map: { parking: {}, traffic: {} }, // 서버와 끊기면 지도도 회색
     total: { ...latest.total, count: null, level: 'unknown', online_cameras: 0 },
     cameras: latest.cameras.map((c) => ({
       ...c, online: false, count: null, level: 'unknown', has_frame: false,
