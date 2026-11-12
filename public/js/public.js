@@ -21,7 +21,7 @@ async function loadMap() {
     svg.removeAttribute('width');
     svg.removeAttribute('height');
     // 서버 값을 받기 전에는 SVG에 그려 둔 임의 색 대신 회색(확인 중)으로 시작
-    applyMapStatus({ parking: {}, traffic: {} }, svg);
+    applyMapStatus({ traffic: {} }, svg);
     if (latest) {
       setMapLevel(latest.total.level);
       applyMapStatus(latest.map);
@@ -40,21 +40,24 @@ function setMapLevel(level) {
     ring.setAttribute('stroke', meta.hex);
     ring.classList.toggle('ring-busy', level === 'busy');
   }
-  if (badge) badge.setAttribute('fill', meta.hex);
-  if (text) text.textContent = level === 'unknown' ? '확인불가' : meta.label;
+  if (badge) {
+    // 원본 배지(가로 48, 가운데 x=287)는 두 글자용 → "확인불가" 네 글자일 땐 넓힌다
+    const w = level === 'unknown' ? 62 : 48;
+    badge.setAttribute('fill', meta.hex);
+    badge.setAttribute('width', w);
+    badge.setAttribute('x', 287 - w / 2);
+  }
+  if (text) {
+    text.textContent = level === 'unknown' ? '확인불가' : meta.label;
+    text.style.fontSize = level === 'unknown' ? '12px' : ''; // 네 글자는 배지 높이(16)에 맞게 줄임
+  }
 }
 
-const PARKING_CLASSES = ['status-free', 'status-busy', 'status-full', 'status-unknown'];
 const TRAFFIC_CLASSES = ['traffic-free', 'traffic-busy', 'traffic-jam', 'traffic-unknown'];
 
-/** map: {parking: {svgId: free|busy|full|unknown}, traffic: {svgId: free|busy|jam|unknown}} */
+/** map: {traffic: {svgId: free|busy|jam|unknown}} — 도로 구간 색만 칠한다 */
 function applyMapStatus(map, root = document.getElementById('map-svg')) {
   if (!root || !map) return;
-  root.querySelectorAll('.parking-status').forEach((c) => {
-    const s = map.parking?.[c.id] ?? 'unknown';
-    c.classList.remove(...PARKING_CLASSES);
-    c.classList.add(`status-${s}`);
-  });
   root.querySelectorAll('.traffic-segment').forEach((p) => {
     const s = map.traffic?.[p.id] ?? 'unknown';
     p.classList.remove(...TRAFFIC_CLASSES);
@@ -145,7 +148,7 @@ function markAllUnknown() {
   if (!latest) return;
   const dead = {
     ...latest,
-    map: { parking: {}, traffic: {} }, // 서버와 끊기면 지도도 회색
+    map: { traffic: {} }, // 서버와 끊기면 도로도 회색
     total: { ...latest.total, count: null, level: 'unknown', online_cameras: 0 },
     cameras: latest.cameras.map((c) => ({
       ...c, online: false, count: null, level: 'unknown', has_frame: false,

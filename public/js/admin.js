@@ -238,13 +238,11 @@ const csv = (unit) => (location.href = `api/admin/export.csv?date=${$('#statDate
 $('#csvHour').addEventListener('click', () => csv('hour'));
 $('#csvMinute').addEventListener('click', () => csv('minute'));
 
-// ---------- 지도 (주차장 · 도로) ----------
-const PARKING_OPTS = [['free', '여유'], ['busy', '혼잡'], ['full', '만차'], ['unknown', '확인중']];
+// ---------- 지도 (도로) ----------
 const TRAFFIC_OPTS = [['auto', '자동'], ['free', '원활'], ['busy', '서행'], ['jam', '정체'], ['unknown', '확인중']];
-const PARKING_LABEL = Object.fromEntries(PARKING_OPTS);
-const TRAFFIC_LABEL = Object.fromEntries(TRAFFIC_OPTS); // 같은 busy라도 주차는 '혼잡', 도로는 '서행'
+const TRAFFIC_LABEL = Object.fromEntries(TRAFFIC_OPTS);
 let mapDetail = null;
-const nameOf = (id) => mapDetail?.parking.find((p) => p.id === id)?.name ?? mapDetail?.traffic.find((t) => t.id === id)?.name ?? id;
+const nameOf = (id) => mapDetail?.traffic.find((t) => t.id === id)?.name ?? id;
 
 function seg(opts, current, onPick, label) {
   return el('div', { class: 'seg', role: 'group', 'aria-label': label },
@@ -267,11 +265,6 @@ async function putMap(body) {
 
 function renderMap() {
   if (!mapDetail) return;
-  $('#parkingRows').replaceChildren(...mapDetail.parking.map((p) => el('div', { class: 'map-row' },
-    el('span', {}, p.name, el('small', { text: p.updated_at ? `${timeText(p.updated_at, false)} 변경` : '아직 안 정함' })),
-    seg(PARKING_OPTS, p.status, (v) => putMap({ parking: { [p.id]: v } }), `${p.name} 주차 상태`),
-  )));
-
   const its = mapDetail.its;
   $('#itsStatus').textContent = !its.enabled
     ? '자동 수집 꺼짐 (ITS_API_KEY 없음) · 직접 눌러서 정해 주세요. "자동"은 확인중으로 보입니다.'
@@ -295,13 +288,6 @@ async function loadMap() {
   } catch { /* 401이면 api()가 처리 */ }
 }
 
-document.querySelectorAll('[data-all]').forEach((b) => b.addEventListener('click', () => {
-  if (!mapDetail) return;
-  const v = b.dataset.all;
-  if (!confirm(`주차장 ${mapDetail.parking.length}곳을 모두 "${PARKING_LABEL[v]}"(으)로 바꿀까요?`)) return;
-  putMap({ parking: Object.fromEntries(mapDetail.parking.map((p) => [p.id, v])) });
-}));
-
 // ---------- 변경 기록 ----------
 async function loadLog() {
   try {
@@ -310,11 +296,8 @@ async function loadLog() {
       ...(log.length ? log : [null]).map((r) => {
         if (!r) return el('div', { text: '아직 변경 기록이 없습니다.' });
         if (r.action === 'map') {
-          const parts = [
-            ...Object.entries(r.detail?.parking ?? {}).map(([id, s]) => `${nameOf(id)} ${PARKING_LABEL[s] ?? s}`),
-            ...Object.entries(r.detail?.traffic ?? {}).map(([id, s]) => `${nameOf(id)} ${TRAFFIC_LABEL[s] ?? s}`),
-          ];
-          return el('div', {}, el('b', { text: new Date(r.ts).toLocaleString('ko-KR') }), ' · 지도 ', el('b', { text: parts.join(', ') }));
+          const parts = Object.entries(r.detail?.traffic ?? {}).map(([id, s]) => `${nameOf(id)} ${TRAFFIC_LABEL[s] ?? s}`);
+          return el('div', {}, el('b', { text: new Date(r.ts).toLocaleString('ko-KR') }), ' · 도로 ', el('b', { text: parts.join(', ') || '-' }));
         }
         const a = r.detail?.after?.total;
         const b = r.detail?.before?.total;

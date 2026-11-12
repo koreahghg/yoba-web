@@ -36,14 +36,14 @@ test('속도 → 원활/서행/정체', () => {
   assert.equal(speedStatus(NaN, seg), 'unknown');
 });
 
-test('주차장은 처음엔 확인중, 어드민이 바꾸면 반영되고 저장됨', () => {
+test('도로 수동 값은 저장되어 재시작해도 유지, ITS 꺼져 있으면 자동은 확인중', () => {
   const store = openStore(':memory:');
-  const m = createMapState(store, { state: { enabled: false, speeds: new Map() } });
-  assert.equal(m.snapshot().parking['dot-usan-middle'], 'unknown');
-  m.update({ parking: { usan_middle: 'full' } });
-  assert.equal(m.snapshot().parking['dot-usan-middle'], 'full');
-  const again = createMapState(store, { state: { enabled: false, speeds: new Map() } });
-  assert.equal(again.snapshot().parking['dot-usan-middle'], 'full');
+  const off = { state: { enabled: false, speeds: new Map() } };
+  const m = createMapState(store, off);
+  assert.equal(m.snapshot().traffic['traffic-yb-01'], 'unknown');
+  m.update({ traffic: { 'yb-01': 'jam' } });
+  assert.equal(createMapState(store, off).snapshot().traffic['traffic-yb-01'], 'jam');
+  assert.equal(m.snapshot().parking, undefined); // 학교·장소 점에는 상태 없음
 });
 
 test('도로: 자동은 ITS 속도, 수동이 우선, ITS가 오래되면 확인중', () => {
@@ -67,8 +67,7 @@ test('도로: 자동은 ITS 속도, 수동이 우선, ITS가 오래되면 확인
 });
 
 test('지도 변경 검증', () => {
-  assert.equal(validateMapUpdate({ parking: { usan_middle: 'busy' }, traffic: { 'dg-01': 'auto' } }), null);
-  assert.ok(validateMapUpdate({ parking: { nowhere: 'busy' } }));
-  assert.ok(validateMapUpdate({ parking: { usan_middle: 'jam' } }));
+  assert.equal(validateMapUpdate({ traffic: { 'dg-01': 'auto', 'yb-03': 'jam' } }), null);
+  assert.ok(validateMapUpdate({ traffic: { nowhere: 'jam' } }));
   assert.ok(validateMapUpdate({ traffic: { 'dg-01': 'full' } }));
 });

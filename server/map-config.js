@@ -1,18 +1,6 @@
-// 지도(public/map/map_traffic.svg)의 주차장 점과 도로 구간 정의.
+// 지도(public/map/map_traffic.svg)의 도로 구간 정의. 학교·장소 점에는 혼잡도를 표시하지 않는다.
 // svg: SVG 요소 id. its_links: 국가교통정보센터 링크 ID (npm run its-links로 찾아서 채움).
 // 속도 기준(km/h): free_kmh 이상 원활, jam_kmh 미만 정체, 그 사이 서행.
-
-export const PARKING = [
-  { id: 'training_center', name: '교육연수원', svg: 'dot-training-center' },
-  { id: 'usan_middle', name: '우산중', svg: 'dot-usan-middle' },
-  { id: 'munjeong_girls_high', name: '문정여고', svg: 'dot-munjeong-girls-high' },
-  { id: 'munjeong_elementary', name: '문정초', svg: 'dot-munjeong-elementary' },
-  { id: 'munsan_middle', name: '문산중', svg: 'dot-munsan-middle' },
-  { id: 'ojeong_elementary', name: '오정초', svg: 'dot-ojeong-elementary' },
-  { id: 'yongbong_middle', name: '용봉중', svg: 'dot-yongbong-middle' },
-  { id: 'munwoo_elementary', name: '문우초', svg: 'dot-munwoo-elementary' },
-  { id: 'munheung_middle', name: '문흥중', svg: 'dot-munheung-middle' },
-];
 
 // ITS 링크는 AI교육원으로 들어가는 방향(지도 화살표 방향)만 넣었다. 2026-11-12에 ITS 노드 연결
 // (시작·끝 노드)과 OpenStreetMap 도로 모양으로 경로를 확인함:
@@ -37,5 +25,4 @@ export const TRAFFIC = [
 // ITS 조회 범위 (경도 minX~maxX, 위도 minY~maxY). 위 6구간만 덮도록 좁힘 (응답이 작아짐)
 export const ITS_BBOX = { minX: 126.908, maxX: 126.93, minY: 35.181, maxY: 35.19 };
 
-export const PARKING_STATUS = ['free', 'busy', 'full', 'unknown'];
 export const TRAFFIC_MODES = ['auto', 'free', 'busy', 'jam', 'unknown'];

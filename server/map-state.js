@@ -1,16 +1,10 @@
-// 지도 상태: 주차장(어드민 수동) + 도로(ITS 자동 또는 어드민 수동).
+// 지도 상태: 도로 구간별 원활/서행/정체 (ITS 자동 또는 어드민 수동).
 // ITS 값이 오래되면(조회 주기 3번) "확인중"으로 내린다. 끊긴 데이터를 "원활"로 보이지 않게.
 
 import { speedStatus } from './its.js';
-import { PARKING, PARKING_STATUS, TRAFFIC, TRAFFIC_MODES } from './map-config.js';
-
-const EMPTY = { parking: {}, traffic: {} };
+import { TRAFFIC, TRAFFIC_MODES } from './map-config.js';
 
 export function validateMapUpdate(body) {
-  for (const [id, v] of Object.entries(body?.parking ?? {})) {
-    if (!PARKING.some((p) => p.id === id)) return `알 수 없는 주차장: ${id}`;
-    if (!PARKING_STATUS.includes(v)) return `${id}: 상태는 ${PARKING_STATUS.join('/')} 중 하나`;
-  }
   for (const [id, v] of Object.entries(body?.traffic ?? {})) {
     if (!TRAFFIC.some((t) => t.id === id)) return `알 수 없는 도로 구간: ${id}`;
     if (!TRAFFIC_MODES.includes(v)) return `${id}: 모드는 ${TRAFFIC_MODES.join('/')} 중 하나`;
@@ -19,8 +13,7 @@ export function validateMapUpdate(body) {
 }
 
 export function createMapState(store, its, { intervalSec = 120 } = {}) {
-  let manual = store.getJson('map', EMPTY);
-  manual = { parking: manual.parking ?? {}, traffic: manual.traffic ?? {} };
+  const manual = { traffic: store.getJson('map', {}).traffic ?? {} };
 
   function itsFresh(now) {
     return its.state.enabled && its.state.lastOkAt && now - its.state.lastOkAt < intervalSec * 3 * 1000;
@@ -35,27 +28,19 @@ export function createMapState(store, its, { intervalSec = 120 } = {}) {
   }
 
   return {
-    /** 방문객 화면용 (작게) */
+    /** 방문객 화면용: {traffic: {svgId: free|busy|jam|unknown}} */
     snapshot(now = Date.now()) {
-      const parking = {};
-      for (const p of PARKING) parking[p.svg] = manual.parking[p.id]?.status ?? 'unknown';
       const traffic = {};
       for (const t of TRAFFIC) {
         const mode = manual.traffic[t.id]?.mode ?? 'auto';
         traffic[t.svg] = mode === 'auto' ? autoTraffic(t, now).status : mode;
       }
-      return { parking, traffic };
+      return { traffic };
     },
 
     /** 어드민용 (이름, 수동/자동 구분, 속도) */
     detail(now = Date.now()) {
       return {
-        parking: PARKING.map((p) => ({
-          id: p.id,
-          name: p.name,
-          status: manual.parking[p.id]?.status ?? 'unknown',
-          updated_at: manual.parking[p.id]?.at ?? null,
-        })),
         traffic: TRAFFIC.map((t) => {
           const mode = manual.traffic[t.id]?.mode ?? 'auto';
           const auto = autoTraffic(t, now);
@@ -81,9 +66,8 @@ export function createMapState(store, its, { intervalSec = 120 } = {}) {
       };
     },
 
-    /** body: {parking: {id: status}, traffic: {id: mode}} — 바뀐 것만 보내도 됨 */
+    /** body: {traffic: {id: mode}} — 바뀐 것만 보내도 됨 */
     update(body, now = Date.now()) {
-      for (const [id, status] of Object.entries(body.parking ?? {})) manual.parking[id] = { status, at: now };
       for (const [id, mode] of Object.entries(body.traffic ?? {})) manual.traffic[id] = { mode, at: now };
       store.putJson('map', manual);
     },

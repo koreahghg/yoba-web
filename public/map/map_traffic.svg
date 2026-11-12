@@ -99,16 +99,16 @@
   </metadata>
   <g inkscape:groupmode="layer" inkscape:label="파란 점" id="layer-dots" transform="translate(0,-0.84707069)">
     <circle id="dot-gwangju-science-high" inkscape:label="광주자연과학고 점" cx="287" cy="54" r="4" fill="#0a63b6" class="poi-dot"/>
-    <circle id="dot-training-center" inkscape:label="교육연수원 점" cx="361.52411" cy="69.121849" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
-    <circle id="dot-usan-middle" inkscape:label="우산중 점" cx="148.67867" cy="124.91516" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-training-center" inkscape:label="교육연수원 점" cx="361.52411" cy="69.121849" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-usan-middle" inkscape:label="우산중 점" cx="148.67867" cy="124.91516" r="4" fill="#0a63b6" class="poi-dot"/>
     <circle id="dot-safety-center" inkscape:label="빛고을국민안전체험관 점" cx="249.37276" cy="112.35219" r="4" fill="#0a63b6" class="poi-dot"/>
-    <circle id="dot-munjeong-girls-high" inkscape:label="문정여고 점" cx="339" cy="114" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
-    <circle id="dot-munjeong-elementary" inkscape:label="문정초 점" cx="384" cy="110" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
-    <circle id="dot-munsan-middle" inkscape:label="문산중 점" cx="448" cy="104" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
-    <circle id="dot-ojeong-elementary" inkscape:label="오정초 점" cx="132" cy="219" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
-    <circle id="dot-yongbong-middle" inkscape:label="용봉중 점" cx="87.303154" cy="223.76486" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
-    <circle id="dot-munwoo-elementary" inkscape:label="문우초 점" cx="243" cy="207" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
-    <circle id="dot-munheung-middle" inkscape:label="문흥중 점" cx="298" cy="207" r="11.5" class="parking-status status-free" data-status="free" opacity="1"/>
+    <circle id="dot-munjeong-girls-high" inkscape:label="문정여고 점" cx="339" cy="114" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-munjeong-elementary" inkscape:label="문정초 점" cx="384" cy="110" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-munsan-middle" inkscape:label="문산중 점" cx="448" cy="104" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-ojeong-elementary" inkscape:label="오정초 점" cx="132" cy="219" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-yongbong-middle" inkscape:label="용봉중 점" cx="87.303154" cy="223.76486" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-munwoo-elementary" inkscape:label="문우초 점" cx="243" cy="207" r="4" fill="#0a63b6" class="poi-dot"/>
+    <circle id="dot-munheung-middle" inkscape:label="문흥중 점" cx="298" cy="207" r="4" fill="#0a63b6" class="poi-dot"/>
     <circle id="dot-munheung-central-elementary" inkscape:label="문흥중앙초 점" cx="371" cy="267" r="4" fill="#0a63b6" class="poi-dot"/>
     <circle id="dot-munsan-elementary" inkscape:label="문산초 점" cx="488" cy="174" r="4" fill="#0a63b6" class="poi-dot"/>
   </g>
