@@ -25,11 +25,17 @@ export const TRAFFIC = [
   { id: 'dg-03', name: '문흥중앙초 → 중앙분기 (대천로)', svg: 'traffic-dg-03', its_links: ['1780072500'], free_kmh: 20, jam_kmh: 10 },
   { id: 'dg-04', name: '중앙분기 연결부 (대천로)', svg: 'traffic-dg-04', its_links: ['1780075100'], free_kmh: 20, jam_kmh: 10 },
   { id: 'dg-05', name: 'AI교육원 남측 접근로 (대천로)', svg: 'traffic-dg-05', its_links: ['1780074500'], free_kmh: 20, jam_kmh: 10 },
-  { id: 'dg-06', name: 'AI교육원 진입로 (능안로)', svg: 'traffic-dg-06', its_links: ['1780074800'], free_kmh: 20, jam_kmh: 10 },
+  { id: 'dg-06', name: 'AI교육원 진입로 (능안로, YB-04 공통)', svg: 'traffic-dg-06', its_links: ['1780074800'], free_kmh: 20, jam_kmh: 10 },
+  // 용봉중 → AI교육원 (지도 왼쪽 1~4번). 4번은 위 DG-06과 같은 구간이라 따로 없음.
+  //   1780029200(용봉중) ─서하로─ 1780029700(북부소방서) ─서하로─ 1780029600 ─송월로─
+  //   1780028100(문우초 서측) ─대천로─ 1780028300(AI교육원 남측 교차점)
+  { id: 'yb-01', name: '용봉중 → 북부소방서 (서하로)', svg: 'traffic-yb-01', its_links: ['1780077400'], free_kmh: 20, jam_kmh: 10 },
+  { id: 'yb-02', name: '북부소방서 → 문우초 서측 (서하로·송월로)', svg: 'traffic-yb-02', its_links: ['1780078200', '1780074100'], free_kmh: 20, jam_kmh: 10 },
+  { id: 'yb-03', name: '문우초 서측 → AI교육원 남측 교차점 (대천로)', svg: 'traffic-yb-03', its_links: ['1780074000'], free_kmh: 20, jam_kmh: 10 },
 ];
 
 // ITS 조회 범위 (경도 minX~maxX, 위도 minY~maxY). 위 6구간만 덮도록 좁힘 (응답이 작아짐)
-export const ITS_BBOX = { minX: 126.914, maxX: 126.93, minY: 35.181, maxY: 35.19 };
+export const ITS_BBOX = { minX: 126.908, maxX: 126.93, minY: 35.181, maxY: 35.19 };
 
 export const PARKING_STATUS = ['free', 'busy', 'full', 'unknown'];
 export const TRAFFIC_MODES = ['auto', 'free', 'busy', 'jam', 'unknown'];

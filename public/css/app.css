@@ -89,7 +89,6 @@ body { margin: 0; color: var(--text); background: var(--page); }
 .map-legend .rd.busy { background: var(--normal); }
 .map-legend .rd.jam { background: var(--busy); }
 .map-legend .rd.unknown { background: var(--unknown); opacity: .5; }
-#map-svg #traffic-dg-markers { display: none; }
 #map-svg #ai-congestion-ring, #map-svg #ai-congestion-badge { transition: stroke .4s, fill .4s; }
 @keyframes ring-pulse { 0%, 100% { opacity: .95; } 50% { opacity: .45; } }
 #map-svg .ring-busy { animation: ring-pulse 1.6s ease-in-out infinite; }
