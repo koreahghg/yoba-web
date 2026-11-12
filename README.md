@@ -68,6 +68,18 @@ ssh -N -L 6379:127.0.0.1:6379 사용자@학교서버주소
 
 이 창을 켜 둔 채로 YOBA의 `configs/service.yaml`을 `redis.url: redis://:REDIS_PASSWORD@localhost:6379/0`으로 두고 `--live --publish`로 실행합니다. Redis 포트를 인터넷에 열지 않아도 되고, 전송도 SSH로 암호화됩니다. 터널이 끊기면 웹이 3초 안에 "확인 불가"로 바뀌므로, 행사 때는 `autossh` 등으로 자동 재연결하는 게 좋습니다.
 
+### push하면 자동 반영
+
+학교 서버가 1분마다 GitHub `main`을 확인하고, 새 커밋이 있으면 받아서 다시 띄웁니다 ([tools/auto-deploy.sh](tools/auto-deploy.sh)). 서버에서 한 번만 설정합니다.
+
+```bash
+cd ~/yoba-web && git pull
+./tools/auto-deploy.sh && echo OK     # 먼저 손으로 한 번 실행해 에러가 없는지 확인
+(crontab -l 2>/dev/null; echo "* * * * * $HOME/yoba-web/tools/auto-deploy.sh >> $HOME/yoba-deploy.log 2>&1") | crontab -
+```
+
+배포 기록은 `tail -f ~/yoba-deploy.log`로 봅니다. 서버에서 코드를 직접 고치면 GitHub와 갈라져 자동 배포가 멈추니, 코드는 항상 GitHub로 올립니다.
+
 ## 배포 (서버 1대, Docker 없이)
 
 Node 서버 + Redis + nginx(HTTPS)로 충분합니다. nginx에서는 WebSocket 업그레이드와 MJPEG 버퍼링 끄기가 필요합니다.
