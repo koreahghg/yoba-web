@@ -31,9 +31,12 @@ export function createRedisSource(cfg, log = console) {
     kind: 'redis',
     health: () => ({ ok: r.status === 'ready', status: r.status, error: lastError }),
 
-    /** @returns {Promise<object[]>} 카메라별 원본 JSON (파싱 실패는 건너뜀) */
+    /**
+     * @returns {Promise<object[]|null>} 카메라별 원본 JSON (파싱 실패는 건너뜀).
+     * Redis에 못 붙었으면 null → 웹은 목록을 그대로 두고 "확인 불가"로 표시 (빈 목록과 구분)
+     */
     async readCameras() {
-      if (r.status !== 'ready') return [];
+      if (r.status !== 'ready') return null;
       const ids = (await r.smembers(`${p}:cameras`)).sort();
       if (ids.length === 0) return [];
       const raws = await r.mget(ids.map((id) => `${p}:live:${id}`));

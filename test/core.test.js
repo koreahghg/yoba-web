@@ -87,3 +87,18 @@ test('설정 저장/불러오기', () => {
   store.saveSettings({ total: T, zones: {} });
   assert.deepEqual(store.getSettings().total, T);
 });
+
+test('이름이 없으면 "현장 CCTV N", Redis 목록에서 빠지면 화면에서도 사라짐', () => {
+  const s = new LiveState({ staleMs: 3000, smoothingSeconds: 1 });
+  const named = { ...cam('1', [1]), camera_id: 'cam01', name: '행사장 CCTV (가짜)' };
+  const webcam = { ...cam('1', [2]), camera_id: 'webcam' };
+  s.ingest([named, webcam], 0);
+  let snap = s.publicSnapshot({ total: T }, 10);
+  assert.deepEqual(snap.cameras.map((c) => c.name), ['행사장 CCTV (가짜)', '현장 CCTV 2']);
+  s.ingest(null, 100); // Redis 끊김: 목록 유지 (3초 뒤 확인 불가)
+  assert.equal(s.publicSnapshot({ total: T }, 110).cameras.length, 2);
+  s.ingest([{ ...webcam, updated_at: '2' }], 200); // cam01 정리됨
+  snap = s.publicSnapshot({ total: T }, 210);
+  assert.deepEqual(snap.cameras.map((c) => [c.id, c.name]), [['webcam', '현장 CCTV 1']]);
+  assert.equal(snap.total.cameras, 1);
+});

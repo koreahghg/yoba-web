@@ -96,21 +96,25 @@ function centroid(poly) {
 }
 
 /**
- * 영상 위 SVG: 구역 테두리(단계 색) + 구역 인원 라벨.
- * demo=true이면 실제 영상 대신 바닥과 점(사람 수만큼)을 그린다.
+ * CCTV 칸 위 SVG.
+ * - mode 'video'      : 실제 영상이 있음 → 아무것도 겹치지 않음 (CCTV 화면만)
+ * - mode 'placeholder': 숫자만 오고 영상이 없음 → 바닥 + 구역 테두리 + 사람 수만큼 점 + note 문구
+ * - mode 'offline'    : 끊김 → 회색 점선 구역만 (위에 "확인 불가" 문구는 HTML이 띄움)
  */
-export function renderOverlay(svg, cam, { demo = false, scale = 1 } = {}) {
+export function renderOverlay(svg, cam, { mode = 'video', note = '', scale = 1 } = {}) {
   const [w, h] = cam.frame_size;
   svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
   svg.setAttribute('preserveAspectRatio', 'none');
   svg.replaceChildren();
-  if (demo) {
+  if (mode === 'video') return;
+  const placeholder = mode === 'placeholder';
+  if (placeholder) {
     svg.append(el('svg:rect', { class: 'demo-floor', x: 0, y: 0, width: w, height: h }));
-    svg.append(el('svg:text', { x: w - 14, y: h - 30, 'text-anchor': 'end', fill: '#6c7782', 'font-size': 22, 'font-weight': 800, text: '데모 화면 · 실제 영상 아님' }));
+    if (note) svg.append(el('svg:text', { x: w - 14, y: h - 30, 'text-anchor': 'end', fill: '#6c7782', 'font-size': Math.round(w / 44), 'font-weight': 800, text: note }));
   }
   for (const z of cam.zones) {
     if (!z.roi?.length) continue;
-    if (demo && z.count) {
+    if (placeholder && z.count) {
       const rnd = seeded(z.id);
       const xs = z.roi.map((p) => p[0]);
       const ys = z.roi.map((p) => p[1]);

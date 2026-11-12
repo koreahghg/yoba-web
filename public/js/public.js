@@ -66,6 +66,10 @@ function applyMapStatus(map, root = document.getElementById('map-svg')) {
 }
 
 // ---------- CCTV 타일 ----------
+/** 영상이 오면 CCTV 화면만, 숫자만 오면 대체 화면, 끊기면 확인 불가 */
+const overlayMode = (cam) => (!cam.online ? 'offline' : cam.has_frame ? 'video' : 'placeholder');
+const placeholderNote = (state) => (state?.source === 'demo' ? '데모 화면 · 실제 영상 아님' : '영상 준비 중 · 인원 수만 표시');
+
 function createTile(cam) {
   const img = el('img', { class: 'camera-image', alt: '', hidden: true });
   const overlay = el('svg:svg', { class: 'camera-overlay', 'aria-hidden': 'true' });
@@ -111,11 +115,13 @@ function renderCameras(state) {
     t.tile.style.aspectRatio = `${cam.frame_size[0]} / ${cam.frame_size[1]}`;
     t.name.textContent = cam.name;
     t.count.textContent = cam.online ? `사람 ${cam.count}명 · ${LEVEL[cam.level].label}` : '확인 불가';
-    t.time.textContent = cam.online ? (cam.status === 'blur_fail' ? '보호 처리 중 · 화면 가림' : '실시간') : '신호 없음';
+    const mode = overlayMode(cam);
+    t.time.textContent = !cam.online ? '신호 없음'
+      : cam.status === 'blur_fail' ? '보호 처리 중 · 화면 가림'
+        : mode === 'placeholder' ? '영상 준비 중' : '실시간';
     t.down.hidden = cam.online;
-    const demo = state.source === 'demo' && !cam.has_frame;
-    t.img.hidden = !cam.has_frame;
-    renderOverlay(t.overlay, cam, { demo });
+    t.img.hidden = mode !== 'video';
+    renderOverlay(t.overlay, cam, { mode, note: placeholderNote(state) });
   }
 }
 
@@ -164,7 +170,7 @@ function markAllUnknown() {
 
 // ---------- 확대 모달 ----------
 let modalCam = null;
-let modalMode = null; // 'stream' | 'snapshot' | 'demo' | null
+let modalMode = null; // 'stream' | 'snapshot' | 'placeholder' | null
 let modalTimer = null;
 
 function openModal(id) {
@@ -215,8 +221,8 @@ function updateModal() {
   stage.style.width = `min(100%, calc(80vh * ${w / h}))`;
   if (!cam.online) setModalMode(null, cam);
   else if (cam.has_frame) setModalMode(modalMode === 'snapshot' ? 'snapshot' : 'stream', cam);
-  else setModalMode('demo', cam);
-  renderOverlay($('#modalOverlay'), cam, { demo: modalMode === 'demo', scale: 0.8 });
+  else setModalMode('placeholder', cam);
+  renderOverlay($('#modalOverlay'), cam, { mode: overlayMode(cam), note: placeholderNote(latest), scale: 0.8 });
   $('#modalDown').hidden = cam.online;
   $('#modalInfo').replaceChildren(
     `${cam.name} · `,

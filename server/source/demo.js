@@ -13,6 +13,7 @@ export function createDemoSource() {
   let outageUntil = 0;
   let blurFailTotal = 0;
   let frames = 0;
+  let last = [];
 
   return {
     kind: 'demo',
@@ -20,14 +21,13 @@ export function createDemoSource() {
 
     async readCameras() {
       const now = Date.now();
-      if (now < outageUntil) return []; // 끊긴 동안 값이 갱신되지 않음 → 웹이 "확인 불가"로 판정
+      if (now < outageUntil) return last; // 같은 값만 계속 옴(YOBA 멈춤) → 웹이 "확인 불가"로 판정
       const t = (now - started) / 1000;
       const wave = 0.5 + 0.5 * Math.sin(t / 45); // 약 4.7분 주기
       frames += 4;
       if (Math.random() < 0.0003) blurFailTotal += 1;
-      return [{
+      last = [{
         camera_id: 'cam01',
-        name: '행사장 CCTV',
         updated_at: new Date(now).toISOString(),
         frame_size: FRAME_SIZE,
         fps: +(7 + Math.random() * 1.5).toFixed(1),
@@ -42,6 +42,7 @@ export function createDemoSource() {
           count: Math.max(0, Math.round(z.base * (0.3 + 2.2 * wave) + (Math.random() - 0.5) * 6)),
         })),
       }];
+      return last;
     },
 
     async readFrame() {

@@ -3,7 +3,10 @@
 //
 //   npm run fake-yoba                      # 인원 JSON만 (영상 없음)
 //   npm run fake-yoba -- --image test.jpg  # 이 JPEG를 블러 프레임인 척 보냄 (사람 없는 사진 사용)
-//   npm run fake-yoba -- --stop-after 30   # 30초 뒤 멈춤 → 웹이 3초 안에 "확인 불가"로 바뀌는지 확인
+//   npm run fake-yoba -- --stop-after 30   # 30초 뒤 멈춤(값은 남김) → 웹이 3초 안에 "확인 불가"로 바뀌는지 확인
+//   npm run fake-yoba -- --cleanup         # 가짜 카메라 값만 지우고 끝 (웹 화면에서도 사라짐)
+//
+// Ctrl+C로 끄면 가짜 카메라 값을 지운다. 지우지 않으면 웹에 "확인 불가" 카메라로 계속 남는다.
 
 import { readFileSync } from 'node:fs';
 import Redis from 'ioredis';
@@ -20,6 +23,24 @@ const image = arg('image') ? readFileSync(arg('image')) : null;
 const stopAfter = Number(arg('stop-after', 0));
 
 const r = new Redis(url);
+
+async function cleanup() {
+  await r.multi().srem(`${p}:cameras`, cam).del(`${p}:live:${cam}`, `${p}:frame:${cam}`).exec();
+  console.log(`[fake-yoba] 가짜 카메라(${cam}) 값을 지웠습니다.`);
+}
+
+if (process.argv.includes('--cleanup')) {
+  await cleanup();
+  await r.quit();
+  process.exit(0);
+}
+
+process.on('SIGINT', async () => {
+  await cleanup().catch(() => {});
+  await r.quit().catch(() => {});
+  process.exit(0);
+});
+
 const started = Date.now();
 let frames = 0;
 let blurFails = 0;

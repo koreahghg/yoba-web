@@ -21,6 +21,9 @@ export function validateThresholds(t) {
   return null;
 }
 
+/** YOBA가 name을 안 보내면 ID(cam01, webcam…) 대신 "현장 CCTV 1"처럼 순서대로 */
+const displayName = (raw, index) => raw?.name || `현장 CCTV ${index + 1}`;
+
 const sumCounts = (zones) => zones.reduce((s, z) => s + (Number.isFinite(z.count) ? z.count : 0), 0);
 
 export class LiveState {
@@ -37,8 +40,15 @@ export class LiveState {
     return prev + a * (value - prev);
   }
 
-  /** Redis에서 읽은 카메라 목록을 반영한다. */
+  /**
+   * Redis에서 읽은 카메라 목록을 반영한다.
+   * raws가 null이면(Redis 연결 안 됨) 목록은 그대로 두고 갱신만 멈춘다 → 3초 뒤 "확인 불가".
+   * 목록에서 빠진 카메라(yoba:cameras에서 지움, live 키 삭제)는 화면에서도 없앤다.
+   */
   ingest(raws, now = Date.now()) {
+    if (raws === null) return;
+    const present = new Set(raws.map((r) => String(r.camera_id)));
+    for (const id of this.cams.keys()) if (!present.has(id)) this.cams.delete(id);
     for (const raw of raws) {
       const id = String(raw.camera_id);
       let c = this.cams.get(id);
@@ -75,7 +85,7 @@ export class LiveState {
     const cams = [...this.cams.values()].sort((a, b) => a.id.localeCompare(b.id));
     let total = 0;
     let online = 0;
-    const cameras = cams.map((c) => {
+    const cameras = cams.map((c, index) => {
       const isOn = this.isOnline(c, now);
       const raw = c.raw || {};
       const count = isOn ? Math.round(c.smooth) : null;
@@ -96,7 +106,7 @@ export class LiveState {
       });
       return {
         id: c.id,
-        name: raw.name || c.id,
+        name: displayName(raw, index),
         online: isOn,
         status: !isOn ? 'offline' : raw.blur_ok === false ? 'blur_fail' : 'ok',
         count,
@@ -123,11 +133,11 @@ export class LiveState {
 
   /** 어드민 처리 상태 화면용. */
   diagnostics(now = Date.now()) {
-    return [...this.cams.values()].map((c) => {
+    return [...this.cams.values()].sort((a, b) => a.id.localeCompare(b.id)).map((c, index) => {
       const raw = c.raw || {};
       return {
         id: c.id,
-        name: raw.name || c.id,
+        name: displayName(raw, index),
         online: this.isOnline(c, now),
         fps: raw.fps ?? null,
         latency_ms: raw.latency_ms ?? null,
