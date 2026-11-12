@@ -40,7 +40,7 @@ async function readLoop() {
   try {
     const raws = await source.readCameras();
     state.ingest(raws);
-    frames.setCameras([...state.cams.keys()]);
+    frames.setCameras(state.visibleIds());
   } catch (e) {
     log.warn(`[read] ${e.message}`);
   } finally {
@@ -58,7 +58,11 @@ setInterval(() => {
 }, 1000);
 
 function publicState() {
-  const snap = state.publicSnapshot(settings, Date.now(), { source: source.kind, map: mapState.snapshot() });
+  const snap = state.publicSnapshot(settings, Date.now(), {
+    source: source.kind,
+    map: mapState.snapshot(),
+    stream: { tile_fps: cfg.tileFps, modal_fps: cfg.streamMaxFps },
+  });
   for (const c of snap.cameras) c.has_frame = c.online && frames.hasFreshFrame(c.id);
   return snap;
 }
@@ -148,6 +152,7 @@ admin.get('/status', (req, res) => {
     stream_clients: frames.streamCount(),
     stream_max_clients: cfg.streamMaxClients,
     stale_ms: cfg.staleMs,
+    legacy_stale_ms: cfg.legacyStaleMs,
     blur_fail_today: store.blurFailCount(today),
     cameras: state.diagnostics().map((d) => ({
       ...d,

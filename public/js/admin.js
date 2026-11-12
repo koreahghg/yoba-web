@@ -85,6 +85,10 @@ function renderScale() {
 
   // 미리보기: 지금 인원 기준으로 바꾸기 전/후 단계
   const box = $('#preview');
+  if (live?.mode === 'legacy') {
+    box.replaceChildren('지금은 YOBA 10초 모드라 사람 수가 오지 않아요. 방문객 화면은 YOBA가 판정한 단계를 그대로 씁니다. 이 기준은 실시간 모드로 돌아오면 적용됩니다.');
+    return;
+  }
   if (count === null || count === undefined) {
     box.replaceChildren('현재 CCTV 값을 받지 못해 미리보기를 할 수 없습니다.');
     return;
@@ -169,9 +173,13 @@ function renderKpi() {
   if (!live) return;
   const { total } = live;
   const known = total.level !== 'unknown';
-  $('#kCount').replaceChildren(known ? String(total.count) : '-', el('small', { text: '명' }));
+  const legacy = live.mode === 'legacy';
+  $('#kCount').replaceChildren(known && !legacy ? String(total.count) : '-', el('small', { text: '명' }));
+  $('#kCountSub').textContent = legacy ? '10초 모드 · 사람 수 없음' : '스무딩 값';
   $('#kLevel').replaceChildren(levelBadge(total.level));
-  $('#kLevelSub').textContent = `기준 ${live.thresholds.free_max}명 이하 여유 · ${live.thresholds.busy_min}명 이상 혼잡`;
+  $('#kLevelSub').textContent = legacy
+    ? 'YOBA 10초 모드 판정 단계 그대로'
+    : `기준 ${live.thresholds.free_max}명 이하 여유 · ${live.thresholds.busy_min}명 이상 혼잡`;
   $('#kCctv').textContent = `${total.online_cameras} / ${total.cameras}`;
   $('#kCctvSub').textContent = total.cameras === 0 ? 'YOBA에서 카메라 정보를 아직 받지 못함' : total.online_cameras === total.cameras ? '모두 정상 수신' : '끊긴 카메라 있음 · 방문객 화면 "확인 불가"';
 }
@@ -190,8 +198,18 @@ async function loadStatus() {
     if (s.redis.error) items.push(row('Redis 오류', s.redis.error, 'bad'));
     if (s.cameras.length === 0) items.push(row('카메라', 'YOBA가 아직 값을 보내지 않음', 'warn'));
     for (const c of s.cameras) {
-      items.push(el('div', { class: 'status-item', style: 'border-bottom:0;padding-bottom:0' }, el('b', { text: `CCTV · ${c.name} (${c.id})` }), el('span')));
-      items.push(row('연결', c.online ? '정상' : `끊김 (${s.stale_ms / 1000}초 이상 갱신 없음)`, c.online ? 'ok' : 'bad'));
+      const legacy = c.mode === 'legacy';
+      items.push(el('div', { class: 'status-item', style: 'border-bottom:0;padding-bottom:0' },
+        el('b', { text: `${legacy ? '10초 모드' : '실시간'} · ${c.name} (${c.id})` }), el('span')));
+      const staleSec = (legacy ? s.legacy_stale_ms : s.stale_ms) / 1000;
+      items.push(row('연결', c.online ? '정상' : legacy && c.yoba_status === 'error' ? 'YOBA가 장애 기록 (카메라·캡처 문제)' : `끊김 (${staleSec}초 이상 갱신 없음)`, c.online ? 'ok' : 'bad'));
+      if (legacy) {
+        items.push(row('YOBA 판정 단계', c.level ? `${{ free: '여유', normal: '보통', busy: '혼잡' }[c.level]} (점수 ${c.score ?? '-'})` : '-'));
+        items.push(row('신뢰도', c.confidence ?? '-', c.confidence === 'low' ? 'warn' : c.confidence ? 'ok' : null));
+        items.push(row('마지막 갱신', c.last_received_at ? `${timeText(c.last_received_at)} (${ageText(c.age_ms)})` : '-'));
+        items.push(row('이미지', c.has_frame ? '수신 중' : '없음', c.has_frame ? 'ok' : 'warn'));
+        continue;
+      }
       items.push(row('처리 fps', c.fps === null ? '-' : `${c.fps} fps`, c.fps === null ? null : c.fps >= 3 ? 'ok' : 'warn'));
       items.push(row('지연 시간 (캡처→전송)', c.latency_ms === null ? '-' : `${c.latency_ms} ms`, c.latency_ms === null ? null : c.latency_ms < 1000 ? 'ok' : 'warn'));
       items.push(row('마지막 프레임 수신', c.last_received_at ? `${timeText(c.last_received_at)} (${ageText(c.age_ms)})` : '-'));
@@ -201,7 +219,7 @@ async function loadStatus() {
       items.push(row('인원 (원본 → 스무딩)', c.raw_count === null ? '-' : `${c.raw_count} → ${c.smooth_count}`));
     }
     items.push(row('방문객 실시간 접속', `${s.ws_clients}명`));
-    items.push(row('확대 영상 시청', `${s.stream_clients} / ${s.stream_max_clients}`));
+    items.push(row('실시간 영상 연결 (메인+확대)', `${s.stream_clients} / ${s.stream_max_clients}`));
     $('#statusList').replaceChildren(...items);
     $('#demoNote').hidden = s.source !== 'demo';
   } catch { /* 401이면 api()가 로그인 화면으로 */ }

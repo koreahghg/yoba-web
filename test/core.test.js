@@ -102,3 +102,55 @@ test('이름이 없으면 "현장 CCTV N", Redis 목록에서 빠지면 화면�
   assert.deepEqual(snap.cameras.map((c) => [c.id, c.name]), [['webcam', '현장 CCTV 1']]);
   assert.equal(snap.total.cameras, 1);
 });
+
+const zone = (zone_id, updated_at, level, extra = {}) => ({
+  camera_id: `zone:${zone_id}`, legacy: true, zone_id, level, score: 0.5, confidence: 'high', updated_at, status: 'ok', ...extra,
+});
+
+test('10초 모드: 사람 수 없이 YOBA 단계 그대로, 실시간이 살아 있으면 실시간 우선', () => {
+  const s = new LiveState({ staleMs: 3000, legacyStaleMs: 35000, smoothingSeconds: 0.001 });
+  s.ingest([zone('hall', 'a', 1), zone('gate', 'a', 2)], 0);
+  let snap = s.publicSnapshot({ total: T }, 10);
+  assert.equal(snap.mode, 'legacy');
+  assert.deepEqual(snap.cameras.map((c) => [c.name, c.level, c.count]), [['현장 CCTV 1', 'busy', null], ['현장 CCTV 2', 'normal', null]]);
+  assert.equal(snap.total.level, 'busy'); // 가장 혼잡한 구역
+  assert.equal(snap.total.count, null);
+  // 10초 주기라 3초 지나도 살아 있음, 35초 넘게 그대로면 확인 불가
+  assert.equal(s.publicSnapshot({ total: T }, 20_000).total.level, 'busy');
+  s.ingest([zone('hall', 'a', 1), zone('gate', 'a', 2, { confidence: 'low' })], 30_000); // low: updated_at 그대로
+  assert.equal(s.publicSnapshot({ total: T }, 36_000).total.level, 'unknown');
+
+  // 실시간 카메라가 들어오면 실시간만 보임
+  s.ingest([zone('hall', 'b', 1), cam('1', [40])], 40_000);
+  snap = s.publicSnapshot({ total: T }, 40_010);
+  assert.equal(snap.mode, 'live');
+  assert.deepEqual(snap.cameras.map((c) => c.id), ['cam01']);
+  assert.equal(snap.total.level, 'busy');
+  assert.deepEqual(s.visibleIds(40_010), ['cam01']);
+  // 실시간이 멈추면 다시 10초 모드로
+  s.ingest([zone('hall', 'c', 0), cam('1', [40])], 45_000);
+  snap = s.publicSnapshot({ total: T }, 45_010);
+  assert.equal(snap.mode, 'legacy');
+  assert.equal(snap.total.level, 'free');
+});
+
+test('10초 모드: status error는 확인 불가, 오래된 값은 처음부터 확인 불가', () => {
+  const s = new LiveState({ staleMs: 3000, legacyStaleMs: 35000, smoothingSeconds: 1 });
+  s.ingest([zone('hall', 'a', 0, { status: 'error' })], 0);
+  assert.equal(s.publicSnapshot({ total: T }, 10).total.level, 'unknown');
+  const now = Date.parse('2026-11-12T12:00:00+09:00');
+  const s2 = new LiveState({ staleMs: 3000, legacyStaleMs: 35000, smoothingSeconds: 1 });
+  s2.ingest([zone('hall', '2026-11-12T10:00:00+09:00', 0)], now); // 2시간 전 값 (YOBA 꺼진 뒤 남은 것)
+  assert.equal(s2.publicSnapshot({ total: T }, now + 10).total.level, 'unknown');
+});
+
+test('통계: 10초 모드는 0명으로 기록하지 않음', () => {
+  const store = openStore(':memory:');
+  const s = new LiveState({ staleMs: 3000, legacyStaleMs: 35000, smoothingSeconds: 1 });
+  const [start] = dayRangeKst('2026-11-11');
+  s.ingest([zone('hall', 'a', 2)], start);
+  createRecorder(store)(s, start + 10);
+  const h = store.hourly('2026-11-11')[0];
+  assert.equal(h.online_samples, 1);
+  assert.equal(h.avg, null);
+});

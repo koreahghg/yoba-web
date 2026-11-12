@@ -175,6 +175,7 @@ export function createRecorder(store) {
     let total = 0;
     let totalRaw = 0;
     let anyOnline = false;
+    let liveOnline = false; // 10초 모드는 사람 수가 없어 합계에 넣지 않음 (0명으로 기록되지 않게)
     let blurSum = 0;
     const rows = diag.map((d) => {
       let blurFail = 0;
@@ -186,8 +187,11 @@ export function createRecorder(store) {
       }
       if (d.online) {
         anyOnline = true;
-        total += d.smooth_count ?? 0;
-        totalRaw += d.raw_count ?? 0;
+        if (d.smooth_count !== null && d.smooth_count !== undefined) {
+          liveOnline = true;
+          total += d.smooth_count;
+          totalRaw += d.raw_count ?? 0;
+        }
       }
       blurSum += blurFail;
       return {
@@ -198,7 +202,7 @@ export function createRecorder(store) {
         blur_fail: blurFail,
       };
     });
-    rows.push({ camera_id: TOTAL_ID, online: anyOnline, count: anyOnline ? total : null, raw: anyOnline ? totalRaw : null, blur_fail: blurSum });
+    rows.push({ camera_id: TOTAL_ID, online: anyOnline, count: liveOnline ? total : null, raw: liveOnline ? totalRaw : null, blur_fail: blurSum });
     store.recordSamples(now, rows);
   };
 }

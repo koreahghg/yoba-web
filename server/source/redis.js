@@ -4,9 +4,16 @@
 // - {prefix}:live:{camera_id} STRING 실시간 수치 JSON (YOBA가 매 프레임 또는 ≤ 0.5초마다 덮어씀)
 // - {prefix}:frame:{camera_id} STRING 블러된 JPEG 바이트 (TTL 짧게)
 //
+// 기존 10초 모드 (YOBA spec 9.1~9.2) 도 같이 읽는다. 실시간 값이 없을 때 이걸로 보여 준다.
+// - {prefix}:zones            SET   구역 ID 목록
+// - {prefix}:zone:{zone_id}   STRING 구역 JSON {level 0~2, score, confidence, updated_at, status ok/stale/error}
+// - {prefix}:img:{zone_id}    STRING 블러 JPEG (TTL 120초)
+// 10초 모드 구역은 camera_id를 'zone:{zone_id}'로 바꿔 실시간 카메라와 같은 모양으로 넘긴다 (legacy: true).
+//
 // Redis가 죽어도 웹 서버는 죽지 않는다. 읽기 실패는 "확인 불가"로 이어진다.
 
 import Redis from 'ioredis';
+import { LEGACY_PREFIX, isLegacyId } from '../state.js';
 
 export function createRedisSource(cfg, log = console) {
   const p = cfg.keyPrefix;
@@ -37,24 +44,39 @@ export function createRedisSource(cfg, log = console) {
      */
     async readCameras() {
       if (r.status !== 'ready') return null;
-      const ids = (await r.smembers(`${p}:cameras`)).sort();
-      if (ids.length === 0) return [];
-      const raws = await r.mget(ids.map((id) => `${p}:live:${id}`));
+      const [ids, zoneIds] = await Promise.all([r.smembers(`${p}:cameras`), r.smembers(`${p}:zones`)]);
       const out = [];
-      raws.forEach((raw, i) => {
-        if (!raw) return;
+      const parse = (raw, key) => {
         try {
-          out.push({ ...JSON.parse(raw), camera_id: ids[i] });
+          return JSON.parse(raw);
         } catch {
-          log.warn(`[redis] ${p}:live:${ids[i]} JSON 파싱 실패`);
+          log.warn(`[redis] ${key} JSON 파싱 실패`);
+          return null;
         }
-      });
+      };
+      if (ids.length) {
+        ids.sort();
+        const raws = await r.mget(ids.map((id) => `${p}:live:${id}`));
+        raws.forEach((raw, i) => {
+          const v = raw && parse(raw, `${p}:live:${ids[i]}`);
+          if (v) out.push({ ...v, camera_id: ids[i] });
+        });
+      }
+      if (zoneIds.length) {
+        zoneIds.sort();
+        const raws = await r.mget(zoneIds.map((id) => `${p}:zone:${id}`));
+        raws.forEach((raw, i) => {
+          const v = raw && parse(raw, `${p}:zone:${zoneIds[i]}`);
+          if (v) out.push({ ...v, legacy: true, zone_id: zoneIds[i], camera_id: `${LEGACY_PREFIX}${zoneIds[i]}` });
+        });
+      }
       return out;
     },
 
-    /** @returns {Promise<Buffer|null>} */
+    /** @returns {Promise<Buffer|null>} 실시간은 frame 키, 10초 모드는 img 키 */
     async readFrame(cameraId) {
       if (r.status !== 'ready') return null;
+      if (isLegacyId(cameraId)) return r.getBuffer(`${p}:img:${cameraId.slice(LEGACY_PREFIX.length)}`);
       return r.getBuffer(`${p}:frame:${cameraId}`);
     },
 

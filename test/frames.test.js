@@ -61,3 +61,28 @@ test('스냅샷·MJPEG 중계, 끊기면 503, 시청자 상한', async () => {
   hub.close();
   server.close();
 });
+
+test('10초 모드 이미지는 35초까지 살아 있고, 1초에 한 번만 읽음', async () => {
+  let reads = 0;
+  const hub = createFrameHub({ ...cfg, legacyStaleMs: 35000 }, { readFrame: async () => (reads++, Buffer.from('IMG')) });
+  hub.setCameras(['zone:hall']);
+  await new Promise((r) => setTimeout(r, 400));
+  assert.ok(hub.hasFreshFrame('zone:hall'));
+  assert.ok(reads <= 2, `읽은 횟수 ${reads}`);
+  hub.close();
+});
+
+test('MJPEG 박자: 원본 12fps · 상한 10fps면 거의 10fps (한 장씩 건너뛰어 6fps가 되지 않음)', async () => {
+  let n = 0;
+  const hub = createFrameHub({ ...cfg, framePollMs: 10, streamMaxFps: 10 }, { readFrame: async () => Buffer.from(`F${Math.floor((Date.now() - t0) / 83)}`) });
+  const t0 = Date.now();
+  hub.setCameras(['cam01']);
+  const writes = [];
+  const res = { writableLength: 0, writeHead() {}, write(b) { if (String(b).startsWith('--yobaframe')) writes.push(Date.now()); }, end() {} };
+  const req = { params: { cam: 'cam01' }, query: { fps: '10' }, on() {} };
+  hub.stream(req, res);
+  await new Promise((r) => setTimeout(r, 2000));
+  hub.close();
+  n = writes.length;
+  assert.ok(n >= 17 && n <= 22, `2초 동안 ${n}장`);
+});

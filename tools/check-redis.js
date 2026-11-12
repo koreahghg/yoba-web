@@ -34,7 +34,19 @@ console.log(`Redis ${url.replace(/\/\/[^@]*@/, '//***@')} · 접두사 ${p}\n`);
 
 const ids = (await r.smembers(`${p}:cameras`)).sort();
 if (ids.length === 0) {
-  console.log(`✖ ${p}:cameras 가 비어 있음 → YOBA가 --live --publish로 돌고 있는지 확인`);
+  const zones = await r.smembers(`${p}:zones`);
+  if (zones.length) {
+    console.log(`! 실시간 키는 없고 10초 모드 구역 ${zones.length}개가 있습니다 (${zones.join(', ')}).`);
+    for (const z of zones) {
+      const v = JSON.parse((await r.get(`${p}:zone:${z}`)) || 'null');
+      const img = await r.getBuffer(`${p}:img:${z}`);
+      console.log(`  [${z}] level ${v?.level ?? '-'} · status ${v?.status ?? '-'} · ${v?.updated_at ?? '-'} · 이미지 ${img ? `${(img.length / 1024).toFixed(0)}KB` : '없음'}`);
+    }
+    console.log('웹은 10초 모드로 표시합니다 (사람 수 없이 YOBA 판정 단계 그대로). 실시간 검사는 YOBA를 --live --publish로 켠 뒤 다시 실행하세요.');
+    await r.quit();
+    process.exit(0);
+  }
+  console.log(`✖ ${p}:cameras 가 비어 있음 → YOBA가 --live --publish(또는 10초 모드)로 돌고 있는지 확인`);
   process.exit(1);
 }
 
